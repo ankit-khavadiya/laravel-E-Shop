@@ -63,11 +63,15 @@
                     <div class="profile-avatar">
                         <img src="https://ui-avatars.com/api/?name=Admin+User&background=7c3aed&color=fff" alt="Admin User">
                     </div>
-                    <span class="profile-name">Admin User</span>
+                    @if(request()->routeIs('admin-profile'))
+                        <span class="profile-name" id="headerprofileNameDisplay">{{$adminDetails->name}}</span>
+                    @else
+                        <span class="profile-name">{{session('name')}}</span>
+                    @endif
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="#" class="dropdown-item">
+                    <a href="{{route('admin-profile')}}" class="dropdown-item">
                         <i class="fas fa-user"></i> My Profile
                     </a>
                     <a href="{{route('settings')}}" class="dropdown-item">

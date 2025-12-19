@@ -8,6 +8,8 @@ use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SettingController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -23,6 +25,8 @@ Route::prefix('admin')->group(function () {
 
         Route::controller(HomeController::class)->group(function () {
             Route::get('/', 'index')->name('admin.home');
+            Route::get('admin-profile', 'adminProfile')->name('admin-profile');
+            Route::post('post-admin-profile', 'adminProfileEdit')->name('post-admin-profile');
         });
 
         Route::controller(CategoryController::class)->group(function () {

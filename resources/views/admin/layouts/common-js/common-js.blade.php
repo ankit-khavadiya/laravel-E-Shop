@@ -373,6 +373,35 @@
             });
         }
     }
+
+    function addProductEventListeners() {
+        const productTableBody = document.getElementById('productTableBody');
+
+        if (!productTableBody) return;
+
+        // Event delegation (BEST PRACTICE)
+        productTableBody.addEventListener('click', function (e) {
+
+            // Edit product
+            if (e.target.closest('.edit-product')) {
+                const btn = e.target.closest('.edit-product');
+                const productId = btn.dataset.id;
+                console.log('Edit product:', productId);
+                // open modal / load product data here
+            }
+
+            // Delete product
+            if (e.target.closest('.delete-product')) {
+                const btn = e.target.closest('.delete-product');
+                const productId = btn.dataset.id;
+
+                if (confirm('Are you sure you want to delete this product?')) {
+                    console.log('Delete product:', productId);
+                    // delete logic here
+                }
+            }
+        });
+    }
 </script>
 <script>
     // Chart.js initialization for sales analytics

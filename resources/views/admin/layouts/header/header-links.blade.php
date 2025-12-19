@@ -3,6 +3,7 @@
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="{{asset('assets/lib/fontawesome-7/css/all.min.css')}}">
 
+<link rel="stylesheet" href="{{asset('assets/lib/toastr/toastr.min.css')}}">
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

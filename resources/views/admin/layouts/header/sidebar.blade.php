@@ -14,7 +14,7 @@
     <ul class="sidebar-nav">
         <li class="nav-item">
             <a href="{{ route('admin.home') }}"
-               class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
+               class="nav-link {{ request()->routeIs('admin.home') ? 'active' : '' }}">
                 <i class="fas fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>

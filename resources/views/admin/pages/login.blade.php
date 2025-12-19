@@ -57,7 +57,7 @@
                     <label class="form-check-label" for="rememberMe">Remember me</label>
                     <a href="#" class="float-end text-decoration-none">Forgot password?</a>
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary w-100 mb-3 ">
+                <button type="submit" name="submit" id="loginSubmit" class="btn btn-primary w-100 mb-3 ">
                     <i class="fas fa-sign-in-alt me-2"></i> Sign In
                 </button>
 

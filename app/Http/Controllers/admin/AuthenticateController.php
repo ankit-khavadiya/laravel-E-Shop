@@ -7,7 +7,6 @@ use App\Http\Traits\ResponseTrait;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -43,11 +42,5 @@ class AuthenticateController extends Controller
         }catch (\Exception $exception){
            return $this->sendError($exception->getMessage());
         }
-    }
-
-    public function logout()
-    {
-        session()->flush();
-        return redirect()->route('login');
     }
 }

@@ -14,7 +14,6 @@
                 <input type="text" class="form-control" placeholder="Search products, orders, customers...">
             </div>
         </form>
-
         <!-- Navbar Right -->
         <div class="navbar-right">
             <!-- Notifications Dropdown -->
@@ -61,7 +60,11 @@
             <div class="dropdown profile-dropdown">
                 <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     <div class="profile-avatar">
-                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=7c3aed&color=fff" alt="Admin User">
+                        @if(request()->routeIs('admin-profile'))
+                            <img src="{{ $adminDetails->profile_image ? asset('upload/' . $adminDetails->profile_image) : asset('assets/images/user.png') }}" alt="Admin User" class="profile-image">
+                        @else
+                            <img src="{{ session('profile_image') ? asset('upload/' . session('profile_image')) : asset('assets/images/user.png') }}" alt="Admin User" class="profile-image">
+                        @endif
                     </div>
                     @if(request()->routeIs('admin-profile'))
                         <span class="profile-name" id="headerprofileNameDisplay">{{$adminDetails->name}}</span>

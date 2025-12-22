@@ -27,6 +27,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/', 'index')->name('admin.home');
             Route::get('admin-profile', 'adminProfile')->name('admin-profile');
             Route::post('post-admin-profile', 'adminProfileEdit')->name('post-admin-profile');
+            Route::post('admin-profile-image', 'adminProfileImage')->name('admin-profile-image');
+            Route::post('admin-change-password', 'adminChangePassword')->name('admin-change-password');
         });
 
         Route::controller(CategoryController::class)->group(function () {

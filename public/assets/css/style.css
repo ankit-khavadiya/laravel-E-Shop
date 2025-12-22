@@ -356,6 +356,8 @@ body {
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
+    padding: 2px;
+    background-color: #6428C6;
     margin-right: 10px;
     flex-shrink: 0;
 }

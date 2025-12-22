@@ -18,15 +18,19 @@
                 <div class="card-body text-center">
                     <div class="profile-image-container mb-4">
                         <div class="profile-image-wrapper">
-                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=7c3aed&color=fff&size=150&bold=true"
-                                 alt="Admin User"
-                                 class="profile-image rounded-circle"
-                                 id="profileImage">
+                            <img src="{{ $adminDetails->profile_image ? asset('upload/' . $adminDetails->profile_image) : asset('assets/images/user.png') }}" alt="Admin User" class="profile-image rounded-circle" id="profileImage">
+
                             <div class="profile-image-overlay" onclick="document.getElementById('profileImageInput').click()">
                                 <i class="fas fa-camera"></i>
                             </div>
                         </div>
-                        <input type="file" id="profileImageInput" accept="image/*" class="d-none" onchange="previewProfileImage(event)">
+
+                        <form id="imageUploadForm" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $adminDetails->id }}">
+                            <input type="file" name="image" id="profileImageInput" accept="image/*" class="d-none">
+                            <label id="adminProfileImage-error" class="error gt-s1error text-danger" for="adminProfileImage" style="display: none"></label>
+                        </form>
                     </div>
 
                     <h4 class="mb-1" id="profileNameDisplay">{{$adminDetails->name}}</h4>
@@ -193,24 +197,28 @@
                 </div>
                 <div class="card-body">
                     <form id="changePasswordForm">
+                        @csrf
                         <div class="mb-3">
                             <label for="currentPassword" class="form-label">Current Password *</label>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                                <input type="password" name="currentPassword" class="form-control" id="currentPassword" placeholder="Enter current password">
                                 <button class="btn btn-outline-secondary" type="button" id="toggleCurrentPassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                            <label id="adminCurrentPassword-error" class="error text-danger" for="adminCurrentPassword" style="display: none"></label>
                         </div>
 
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">New Password *</label>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new password">
                                 <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                            <label id="adminNewPassword-error" class="error text-danger" for="adminNewPassword" style="display: none"></label>
+
                             <div class="password-strength mt-2">
                                 <small class="text-muted">Password strength:</small>
                                 <div class="progress mt-1" style="height: 5px;">
@@ -223,16 +231,17 @@
                         <div class="mb-4">
                             <label for="confirmPassword" class="form-label">Confirm New Password *</label>
                             <div class="input-group">
-                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                                <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm new password">
                                 <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                             <div id="passwordMatchMessage" class="mt-2"></div>
+                            <label id="adminConfirmPassword-error" class="error text-danger" for="adminConfirmPassword" style="display: none"></label>
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary" id="changePasswordBtn">
+                            <button type="submit" name="submit" class="btn btn-primary" id="changePasswordBtn">
                                 <i class="fas fa-key me-1"></i> Change Password
                             </button>
                         </div>
@@ -433,30 +442,12 @@
             });
         }
 
-        /* ---------------- PROFILE IMAGE ---------------- */
-        function previewProfileImage(e) {
-            const file = e.target.files?.[0];
-            if (!file || file.size > 2e6 || !file.type.startsWith('image/')) {
-                return showAlert('Invalid image (max 2MB)', 'danger');
-            }
-
-            const reader = new FileReader();
-            reader.onload = ev => {
-                profileImage.src = ev.target.result;
-                showAlert('Profile picture updated!', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-
         /* ---------------- ALERT HELPER ---------------- */
         function showAlert(msg, type) {
             document.querySelectorAll('.alert').forEach(a => a.remove());
-
             const alert = document.createElement('div');
             alert.className = `alert alert-${type} alert-dismissible fade show mt-3`;
-            alert.innerHTML = `${msg}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
-
+            alert.innerHTML = `${msg} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
             document.querySelector('.page-header')?.after(alert);
             setTimeout(() => alert.remove(), 5000);
         }
@@ -525,6 +516,114 @@
                         },
                         complete(){
                             $('#infoUpdate').attr('disabled', false);
+                        }
+                    });
+                }
+            });
+
+
+            // Auto submit when image selected
+            $('#profileImageInput').on('change', function () {
+                $('#imageUploadForm').submit();
+            });
+
+            $('#imageUploadForm').validate({
+                rules: {
+                    image: { required: true },
+                },
+                submitHandler: function (form) {
+                    let formData = new FormData(form);
+
+                    $.ajax({
+                        url: "{{ route('admin-profile-image') }}",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            const imageUrl = "{{ asset('upload') }}/" + res.data;
+
+                            $('.profile-image')
+                                .attr('src', imageUrl + '?t=' + new Date().getTime()); // cache busting
+
+                            toastr.success(res.message);
+                            $('#adminProfileImage-error').hide();
+                        },
+
+                        error: function (xhr) {
+                            const res = xhr.responseJSON;
+                            if (res?.error?.image) {
+                                $('#adminProfileImage-error').html(res.error.image[0]).show();
+                            } else {
+                                toastr.error('Image upload failed');
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('#changePasswordForm').validate({
+                rules:{
+                    currentPassword:{ required:true },
+                    newPassword:{ required:true },
+                    confirmPassword:{ required:true }
+                },
+                messages:{
+                    currentPassword:{
+                        required:"please enter currentPassword",
+                    },
+                    newPassword:{
+                        required:"please enter newPassword",
+                    },
+                    confirmPassword:{
+                        required:"please enter confirmPassword"
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    let name = element.attr("name");
+                    if (name === "currentPassword") {
+                        $('#adminCurrentPassword-error').html(error.text()).show();
+                    }
+                    if (name === "newPassword") {
+                        $('#adminNewPassword-error').html(error.text()).show();
+                    }
+                    if (name === "confirmPassword") {
+                        $('#adminConfirmPassword-error').html(error.text()).show();
+                    }
+                },
+                submitHandler:function (form, e) {
+                    e.preventDefault();
+                    var formData = new FormData(form);
+                    $.ajax({
+                        url:"{{route('admin-change-password')}}",
+                        method:"POST",
+                        dataType:"JSON",
+                        data: formData,
+                        processData:false,
+                        contentType:false,
+                        beforeSend:function (){
+                            $('#changePasswordBtn').attr('disabled', true);
+                        },
+                        success:function (response){
+                            toastr.success(response.message);
+                            $('#changePasswordForm').reset();
+                        },
+                        error: function (xhr) {
+                            let res = xhr.responseJSON;
+                            console.log(res);
+                            if (res?.error) {
+                                if (res.error.currentPassword) {
+                                    $('#adminCurrentPassword-error').html(res.error.currentPassword[0]).show();
+                                }
+                                if (res.error.newPassword) {
+                                    $('#adminNewPassword-error').html(res.error.newPassword[0]).show();
+                                }
+                            } else if (res?.message) {
+                                toastr.error(res.message);
+                            }
+                        },
+                        complete:function (){
+                            $('#changePasswordBtn').attr('disabled', false);
                         }
                     });
                 }

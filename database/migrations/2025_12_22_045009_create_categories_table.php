@@ -15,11 +15,8 @@ return new class extends Migration
             $table->id();
             $table->Biginteger('parent_id')->default(0);
             $table->string('name')->unique();
-            $table->string('slug')->unique();
             $table->string('description')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->string('meta_title')->nullable();
-            $table->string('meta_description')->nullable();
             $table->timestamps();
         });
     }

@@ -33,6 +33,7 @@ Route::prefix('admin')->group(function () {
 
         Route::controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index')->name('categories');
+            Route::post('add-category', 'addCategory')->name('add-category');
         });
 
         Route::controller(ProductController::class)->group(function () {

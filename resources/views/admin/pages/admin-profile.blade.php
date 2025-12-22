@@ -521,7 +521,6 @@
                 }
             });
 
-
             // Auto submit when image selected
             $('#profileImageInput').on('change', function () {
                 $('#imageUploadForm').submit();

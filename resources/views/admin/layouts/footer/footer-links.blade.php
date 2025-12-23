@@ -2,5 +2,8 @@
 <!-- Bootstrap JS Bundle -->
 <script src="{{asset('assets/lib/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Bootstrap JS Bundle -->
+
+<script src="{{asset('assets/lib/DataTables/datatables.min.js')}}"></script>
+
 <script src="{{asset('assets/lib/jquery-validation/jquery.validate.js')}}"></script>
 <script src="{{asset('assets/lib/toastr/toastr.min.js')}}"></script>

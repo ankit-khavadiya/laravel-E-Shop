@@ -20,6 +20,7 @@ class HomeController extends Controller
     public function adminProfile()
     {
         $adminDetails = Auth::guard('admin')->user();
+        session(['profile_image' => $adminDetails->profile_image]);
         return view('admin.pages.admin-profile', compact('adminDetails'));
     }
 
@@ -41,7 +42,6 @@ class HomeController extends Controller
             $admin = Admin::find($request->get('id'));
             $admin->fill($request->only(['name', 'email', 'phone', 'address', 'country']))->save();
             session(['name' => $admin->name]);
-
             return $this->sendResponse('Profile Updated Successfully',$admin->name);
 
         }catch (\Exception $exception){
@@ -74,7 +74,6 @@ class HomeController extends Controller
                 $imageName = fileName($image->getClientOriginalExtension());
                 $image->move(public_path('upload'), $imageName);
                 $admin->profile_image = $imageName;
-                session(['profile_image' => $imageName]);
             }
 
             $admin->save();

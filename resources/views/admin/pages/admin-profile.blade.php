@@ -314,7 +314,6 @@
         function initAdminProfile() {
             setupPasswordToggles();
             setupPasswordStrength();
-            // setupChangePasswordForm();
             setupSecuritySettings();
         }
 
@@ -391,33 +390,6 @@
             msg.className = `mt-2 ${p1 === p2 ? 'text-success' : 'text-danger'}`;
         }
 
-        /* ---------------- CHANGE PASSWORD FORM ---------------- */
-        // function setupChangePasswordForm() {
-        //     const form = document.getElementById('changePasswordForm');
-        //     if (!form) return;
-        //
-        //     form.addEventListener('submit', e => {
-        //         e.preventDefault();
-        //
-        //         const cur = currentPassword.value;
-        //         const next = newPassword.value;
-        //         const conf = confirmPassword.value;
-        //
-        //         if (!cur || !next) return showAlert('All fields are required', 'danger');
-        //         if (next !== conf) return showAlert('Passwords do not match', 'danger');
-        //         if (passwordScore(next) < 3) return showAlert('Password too weak', 'warning');
-        //
-        //         toggleBtn(true);
-        //
-        //         setTimeout(() => {
-        //             form.reset();
-        //             updateStrength('');
-        //             passwordMatchMessage.textContent = '';
-        //             toggleBtn(false);
-        //             showAlert('Password changed successfully!', 'success');
-        //         }, 1200);
-        //     });
-        // }
 
         function toggleBtn(loading) {
             const btn = document.getElementById('changePasswordBtn');
@@ -490,7 +462,6 @@
                         },
                         error: function (xhr) {
                             let res = xhr.responseJSON;
-                            console.log(res);
                             if (res?.error) {
                                 if (res.error.id) {
                                     toastr.error(res.error.id[0]);

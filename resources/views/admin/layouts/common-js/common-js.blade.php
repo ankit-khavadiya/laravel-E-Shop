@@ -89,7 +89,6 @@
         loadProducts();
         loadOrders();
         loadCustomers();
-        loadCategories();
         loadPayments();
 
         // Add product event listeners for existing products
@@ -292,45 +291,6 @@
         }
     }
 
-    // Load sample categories data
-    function loadCategories() {
-        const categories = [
-            { id: 1, name: "Electronics", description: "Electronic devices and accessories", products: 45, status: "active" },
-            { id: 2, name: "Fashion", description: "Clothing, shoes, and accessories", products: 128, status: "active" },
-            { id: 3, name: "Home & Kitchen", description: "Home appliances and kitchenware", products: 67, status: "active" },
-            { id: 4, name: "Books", description: "Books and educational materials", products: 89, status: "active" },
-            { id: 5, name: "Sports & Outdoors", description: "Sports equipment and outdoor gear", products: 34, status: "active" },
-            { id: 6, name: "Toys & Games", description: "Toys and games for all ages", products: 56, status: "inactive" }
-        ];
-
-        const categoryTableBody = document.getElementById('categoryTableBody');
-
-        if (categoryTableBody) {
-            categoryTableBody.innerHTML = '';
-
-            categories.forEach(category => {
-                const statusClass = category.status === 'active' ? 'success' : 'danger';
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>CAT-${category.id.toString().padStart(4, '0')}</td>
-                <td>${category.name}</td>
-                <td>${category.products}</td>
-                <td><span class="badge bg-${statusClass}">${category.status}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `;
-
-                categoryTableBody.appendChild(row);
-            });
-        }
-    }
 
     // Load sample payments data
     function loadPayments() {

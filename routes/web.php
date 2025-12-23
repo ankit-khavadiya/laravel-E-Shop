@@ -34,6 +34,10 @@ Route::prefix('admin')->group(function () {
         Route::controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index')->name('categories');
             Route::post('add-category', 'addCategory')->name('add-category');
+            Route::post('get-category', 'getCategory')->name('get-category');
+            Route::post('edit-category', 'editCategory')->name('edit-category');
+            Route::post('post-edit-category', 'postEditCategory')->name('post-edit-category');
+            Route::post('delete-category', 'deleteCategory')->name('delete-category');
         });
 
         Route::controller(ProductController::class)->group(function () {

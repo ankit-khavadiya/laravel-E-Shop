@@ -1104,3 +1104,8 @@ canvas {
 body, .card, .form-control, .btn {
     transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
 }
+
+/* category dataTable */
+div.dt-container .dt-input {
+    margin-right: 10px !important;
+}

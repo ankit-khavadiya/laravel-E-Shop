@@ -7,6 +7,7 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<link rel="stylesheet" href="{{asset('assets/lib/DataTables/datatables.min.css')}}">
 <!-- Custom CSS -->
 <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 <link rel="stylesheet" href="{{asset('assets/css/dashboard.css')}}">

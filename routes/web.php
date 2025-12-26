@@ -43,7 +43,7 @@ Route::prefix('admin')->group(function () {
         Route::controller(ProductController::class)->group(function () {
             Route::get('products', 'index')->name('products');
             Route::post('add-product', 'addProduct')->name('add-product');
-            Route::post('get-product', 'getProduct')->name('get-product');
+            Route::post('get-product', 'getProducts')->name('get-product');
             Route::post('edit-product', 'editProduct')->name('edit-product');
             Route::post('post-edit-product', 'postEditProduct')->name('post-edit-product');
             Route::post('delete-product', 'deleteProduct')->name('delete-product');

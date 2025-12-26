@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ResponseTrait;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -158,6 +159,11 @@ class CategoryController extends Controller
                 return $this->sendValidationError( $validator->errors());
             }
 
+            $product = Product::find(['category_id'=>$request->id])->first();
+            if($product){
+                return $this->sendError('category existed in Product so first delete Product');
+            }
+
             $hasChildren = Category::where('parent_id', $request->id)->exists();
             if ($hasChildren) {
                 return $this->sendError('This category has sub-categories and cannot be deleted.');
@@ -173,5 +179,4 @@ class CategoryController extends Controller
             return $this->sendError($exception->getMessage());
         }
     }
-
 }

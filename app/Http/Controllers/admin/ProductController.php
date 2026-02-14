@@ -157,6 +157,7 @@ class ProductController extends Controller
                 return $this->sendValidationError($validator->errors());
             }
 
+
             $product = Product::with('category')->where(['id' => $request->id])->first();
 
             if (!$product) {

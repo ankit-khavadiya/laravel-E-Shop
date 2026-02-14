@@ -34,7 +34,9 @@ class AuthenticateController extends Controller
 
             if ($login) {
                 $name = Admin::where('email', $request->email)->first();
+                $name->update(['last_login_at' => now()]);
                 session(['name' => $name->name]);
+                session(['profile_image' => $name->profile_image]);
                 return $this->sendSuccess('Login successfully');
             }else{
                 return $this->sendError('Invalid email or password');

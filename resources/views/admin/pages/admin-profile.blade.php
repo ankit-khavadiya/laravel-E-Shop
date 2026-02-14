@@ -60,11 +60,26 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="text-muted">Last Login:</span>
-                            <span>Today, 10:30 AM</span>
+                            @php
+                                $lastLogin = $adminDetails->last_login_at ? \Carbon\Carbon::parse($adminDetails->last_login_at) : null;
+                            @endphp
+                            <span>
+                                @if($lastLogin)
+                                    @if($lastLogin->isToday())
+                                        Today, {{ $lastLogin->format('h:i A') }}
+                                    @elseif($lastLogin->isYesterday())
+                                        Yesterday, {{ $lastLogin->format('h:i A') }}
+                                    @else
+                                        {{ dateToHuman($adminDetails->last_login_at,'M d, Y h:i A') }}
+                                    @endif
+                                @else
+                                    Never
+                                @endif
+                            </span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="text-muted">Joined:</span>
-                            <span>Jan 15, 2023</span>
+                            <span>{{dateToHuman($adminDetails->created_at,'M d, Y') ?? 'N/A'}}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Role:</span>
@@ -503,7 +518,6 @@
                 },
                 submitHandler: function (form) {
                     let formData = new FormData(form);
-
                     $.ajax({
                         url: "{{ route('admin-profile-image') }}",
                         method: "POST",
@@ -513,13 +527,11 @@
                         success: function (res) {
                             const imageUrl = "{{ asset('upload') }}/" + res.data;
 
-                            $('.profile-image')
-                                .attr('src', imageUrl + '?t=' + new Date().getTime()); // cache busting
+                            $('.profile-image').attr('src', imageUrl + '?t=' + new Date().getTime()); // cache busting
 
                             toastr.success(res.message);
                             $('#adminProfileImage-error').hide();
                         },
-
                         error: function (xhr) {
                             const res = xhr.responseJSON;
                             if (res?.error?.image) {

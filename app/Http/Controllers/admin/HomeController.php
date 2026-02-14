@@ -77,6 +77,7 @@ class HomeController extends Controller
             }
 
             $admin->save();
+            session(['profile_image' => $admin->profile_image]);
             return $this->sendResponse('Profile image updated successfully.',$admin->profile_image);
 
         } catch (\Exception $exception) {

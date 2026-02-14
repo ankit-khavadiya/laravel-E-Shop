@@ -21,6 +21,7 @@ class Admin extends Authenticatable
         'country',
         'password',
         'profile_image',
+        'last_login_at',
     ];
 
     protected $hidden = [

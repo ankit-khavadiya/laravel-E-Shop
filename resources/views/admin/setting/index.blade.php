@@ -9,73 +9,211 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Profile Settings</h5>
+                        <h5 class="mb-0">Store Settings</h5>
                     </div>
+
                     <div class="card-body">
-                        <form id="profileSettingsForm">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" value="Admin" required>
+                        <!-- Tabs -->
+                        <ul class="nav nav-tabs mb-3" id="settingsTabs" role="tablist">
+                            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#general">General</button></li>
+                            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#currency">Currency & Tax</button></li>
+                            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#shipping">Shipping</button></li>
+                            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#payment">Payment</button></li>
+                            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#order">Order</button></li>
+                            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#email">Email</button></li>
+                            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#security">Security</button></li>
+                        </ul>
+
+                        <form id="storeSettingsForm" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="tab-content">
+
+                                <!-- GENERAL -->
+                                <div class="tab-pane fade show active" id="general">
+                                    <div class="mb-3">
+                                        <label class="form-label">Store Name</label>
+                                        <input type="text" name="store_name" class="form-control" value="E-Shop">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Store Email</label>
+                                        <input type="email" name="store_email" class="form-control" value="support@eshop.com">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Store Phone</label>
+                                        <input type="text" name="store_phone" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Store Address</label>
+                                        <textarea name="store_address" class="form-control"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Store Logo</label>
+                                        <input type="file" name="store_logo" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Timezone</label>
+                                        <select name="timezone" class="form-select">
+                                            <option value="UTC">UTC</option>
+                                            <option value="Asia/Kolkata">Asia/Kolkata</option>
+                                            <option value="Europe/Oslo">Europe/Oslo</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" value="User" required>
+
+                                <!-- CURRENCY -->
+                                <div class="tab-pane fade" id="currency">
+                                    <div class="mb-3">
+                                        <label class="form-label">Currency</label>
+                                        <select name="currency" class="form-select">
+                                            <option value="USD">$ USD</option>
+                                            <option value="EUR">€ EUR</option>
+                                            <option value="GBP">£ GBP</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Currency Position</label>
+                                        <select name="currency_position" class="form-select">
+                                            <option value="left">$100</option>
+                                            <option value="right">100$</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Tax (%)</label>
+                                        <input type="number" name="tax" class="form-control" value="10">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Enable Tax</label>
+                                        <select name="enable_tax" class="form-select">
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
                                 </div>
+
+                                <!-- SHIPPING -->
+                                <div class="tab-pane fade" id="shipping">
+                                    <div class="mb-3">
+                                        <label class="form-label">Shipping Charge</label>
+                                        <input type="number" name="shipping_charge" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Free Shipping Above</label>
+                                        <input type="number" name="free_shipping" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Enable Shipping</label>
+                                        <select name="enable_shipping" class="form-select">
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- PAYMENT -->
+                                <div class="tab-pane fade" id="payment">
+                                    <div class="mb-3">
+                                        <label class="form-label">Enable COD</label>
+                                        <select name="cod" class="form-select">
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Stripe Key</label>
+                                        <input type="text" name="stripe_key" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Stripe Secret</label>
+                                        <input type="text" name="stripe_secret" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">PayPal Email</label>
+                                        <input type="email" name="paypal_email" class="form-control">
+                                    </div>
+                                </div>
+
+                                <!-- ORDER -->
+                                <div class="tab-pane fade" id="order">
+                                    <div class="mb-3">
+                                        <label class="form-label">Default Order Status</label>
+                                        <select name="order_status" class="form-select">
+                                            <option value="pending">Pending</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="completed">Completed</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Invoice Prefix</label>
+                                        <input type="text" name="invoice_prefix" class="form-control" value="INV-">
+                                    </div>
+                                </div>
+
+                                <!-- EMAIL -->
+                                <div class="tab-pane fade" id="email">
+                                    <div class="mb-3">
+                                        <label class="form-label">SMTP Host</label>
+                                        <input type="text" name="smtp_host" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">SMTP Port</label>
+                                        <input type="number" name="smtp_port" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">SMTP Email</label>
+                                        <input type="email" name="smtp_email" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">SMTP Password</label>
+                                        <input type="password" name="smtp_password" class="form-control">
+                                    </div>
+                                </div>
+
+                                <!-- SECURITY -->
+                                <div class="tab-pane fade" id="security">
+                                    <div class="mb-3">
+                                        <label class="form-label">Enable Registration</label>
+                                        <select name="registration" class="form-select">
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Email Verification</label>
+                                        <select name="email_verification" class="form-select">
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" value="admin@eshop.com" required>
+
+                            <!-- Submit -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Save All Settings</button>
                             </div>
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone</label>
-                                <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567">
-                            </div>
-                            <div class="mb-3">
-                                <label for="avatar" class="form-label">Profile Picture</label>
-                                <input type="file" class="form-control" id="avatar" accept="image/*">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update Profile</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Store Settings</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="storeSettingsForm">
-                            <div class="mb-3">
-                                <label for="storeName" class="form-label">Store Name</label>
-                                <input type="text" class="form-control" id="storeName" value="E-Shop" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="storeEmail" class="form-label">Store Email</label>
-                                <input type="email" class="form-control" id="storeEmail" value="support@eshop.com" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="storePhone" class="form-label">Store Phone</label>
-                                <input type="tel" class="form-control" id="storePhone" value="+1 (555) 987-6543">
-                            </div>
-                            <div class="mb-3">
-                                <label for="storeAddress" class="form-label">Store Address</label>
-                                <textarea class="form-control" id="storeAddress" rows="3">123 Commerce St, Business City, BC 12345</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="currency" class="form-label">Currency</label>
-                                <select class="form-select" id="currency">
-                                    <option value="USD" selected>US Dollar ($)</option>
-                                    <option value="EUR">Euro (€)</option>
-                                    <option value="GBP">British Pound (£)</option>
-                                    <option value="JPY">Japanese Yen (¥)</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save Settings</button>
                         </form>
                     </div>
                 </div>

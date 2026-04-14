@@ -312,7 +312,7 @@
             $('#addProductBtn').on('click', function () {
                 $('#addProductForm')[0].reset();
                 $('#product-id').val('');
-                $('.field-error,span').text('').hide();
+                $('.field-error').text('').hide();
                 $('.error').removeClass('error text-danger');
                 $('#imagePreview,#galleryPreview').html('');
                 $('#addProductTitle').text('Add Product');
@@ -328,7 +328,7 @@
                     dataType:'JSON',
                     data:{_token: "{{ csrf_token() }}", id:update_id},
                     beforeSend:function (){
-                        $('.field-error,span').text('').hide();
+                        $('.field-error').text('').hide();
                         $('.error').removeClass('error text-danger');
                         $('#addProductForm')[0].reset();
                     },

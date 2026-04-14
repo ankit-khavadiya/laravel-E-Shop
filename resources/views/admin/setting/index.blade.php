@@ -27,7 +27,7 @@
                             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#security">Security</button></li>
                         </ul>
 
-                        <form id="storeSettingsForm" method="POST" enctype="multipart/form-data">
+                        <form id="storeSettingsForm" enctype="multipart/form-data">
                             @csrf
 
                             <div class="tab-content">
@@ -212,7 +212,7 @@
 
                             <!-- Submit -->
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-primary">Save All Settings</button>
+                                <button type="submit" name="submit" class="btn btn-primary">Save All Settings</button>
                             </div>
                         </form>
                     </div>

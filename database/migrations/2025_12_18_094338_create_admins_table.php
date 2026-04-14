@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('password');
             $table->string('profile_image')->nullable();
+            $table->enum('role',['super-admin','admin','sub-admin'])->default('super-admin');
+            $table->enum('status',['ACTIVE','BLOCKED','DELETED'])->default('ACTIVE');
             $table->rememberToken();
             $table->timestamp('last_login_at')->nullable();
             $table->timestamps();

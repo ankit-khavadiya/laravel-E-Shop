@@ -1,6 +1,6 @@
 <?php
 
-// --- Create Laravel project ---
+/* --- Create Laravel project --- */
 
 // Global installation
 // 1. composer global require laravel/installer
@@ -11,11 +11,11 @@
 
 
 
-// --- Composer commands ---
+/* --- Composer commands --- */
 
 // composer install
 // if we have run old project(like get by github) then run this commands
-// composer update --ignore-platform-reqs
+// composer update --ignore-platform-reqs   // If you face php version issue then use this command
 // php artisan key:generate
 // cp .env.example .env
 // php artisan migrate --database=mysql_react --seed
@@ -23,7 +23,7 @@
 
 
 
-// --- Clear cache ---
+/* --- Clear cache --- */
 
 // php artisan cache:clear
 // php artisan view:cache
@@ -37,7 +37,7 @@
 
 
 
-// --- Controller ---
+/* --- Controller --- */
 
 // Create controller :- php artisan make:controller web/HomeController
 // Create controller with CRUD operation :- php artisan make:controller PostController --resource
@@ -45,7 +45,7 @@
 
 
 
-// --- Migration ---
+/* --- Migration --- */
 
 // Create migration :- php artisan make:migration create_admins_table
 // Run :- php artisan migrate
@@ -74,7 +74,7 @@
 
 
 
-// --- Models ---
+/* --- Models --- */
 
 // Create model :- php artisan make:model Admin
 
@@ -112,7 +112,7 @@
 
 
 
-// --- Seeder ---
+/* --- Seeder --- */
 
 // Create Command :- php artisan make:seeder UserSeeder
 // Runs the default DatabaseSeeder class :- php artisan db:seed
@@ -121,7 +121,7 @@
 
 
 
-// --- Middleware ---
+/* --- Middleware --- */
 
 // php artisan make:middleware EnsureTokenIsValid
 
@@ -129,21 +129,31 @@
 // I have all common middleware implement in this project look in app/Htto/Middleware
 // most use two :- Authenticate and RedirectIfAuthenticated
 //  Implementing & Registering Middleware : bootstrap/app.php
-    //->withMiddleware(function (Middleware $middleware): void {
-    //    $middleware->alias([
-    //        'guest' => RedirectIfAuthenticated::class,
-    //        'auth' => Authenticate::class,
-    //    ]);
-    //})
+    /*->withMiddleware(function (Middleware $middleware): void {
+            $middleware->alias([
+                'guest' => RedirectIfAuthenticated::class,
+                'auth' => Authenticate::class,
+            ]);
+        }) */
 
 
-// --- Provider ---
+
+/* --- Provider --- */
 
 // Create service :- php artisan make:provider RouteServiceProvider
 
 
 
-// --- Api ---
+/* --- Helper file --- */
+
+// if you are add helper file then define this code in composer.json in autoload:
+/* "files": [
+         "app/Http/Helpers/helper.php"
+     ], */
+
+
+
+/* --- Api --- */
 
 // Implement Api :- php artisan install:api
 // Controller create for api :- php artisan make:controller api/v1/OpenController
@@ -156,7 +166,7 @@
 
 
 
-// --- Mail ---
+/* --- Mail --- */
 
 // php artisan make:mail WelcomeMail
 
@@ -170,7 +180,32 @@
 
 
 
-// --- Yajra Datatable ---
+/* --- Yajra Datatable --- */
 
 // Install composer package :- composer require yajra/laravel-datatables-oracle:"^12.0"
 // I have already use in this demo project
+
+
+
+/* --- JWT authentication --- */
+
+// Install package :- composer require php-open-source-saver/jwt-auth
+// Publish the config :- php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+// Generate the JWT secret key :- php artisan jwt:secret
+
+
+
+/* --- AI implement(AI SDk) --- */
+
+// Ai sdk :- composer require laravel/ai
+
+// Publish configuration and run migrations :-
+// php artisan vendor:publish --provider="Laravel\Ai\AiServiceProvider"
+// php artisan migrate
+
+// Add in .env :- GEMINI_API_KEY=your_api_key_here
+
+// if you need only gemini then :-
+// composer require google-gemini-php/laravel
+// php artisan gemini:install
+// GEMINI_API_KEY=your_api_key_here

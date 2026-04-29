@@ -63,6 +63,7 @@ Route::prefix('admin')->group(function () {
 
         Route::controller(SettingController::class)->group(function () {
             Route::get('settings', 'index')->name('settings');
+            Route::post('settings/update',  'update')->name('settings.update');
         });
     });
 
@@ -72,5 +73,42 @@ Route::prefix('admin')->group(function () {
     })->middleware('auth:admin')->name('logout');
 });
 
+Route::middleware(['guest:web'])->group(function () {
+    Route::controller(\App\Http\Controllers\web\AuthenticateController::class)->group(function () {
+        Route::get('login','login')->name('login');
+        Route::get('register','register')->name('register');
+        Route::post('post-login','postLogin')->name('post-login');
+        Route::post('post-register','postRegister')->name('register-login');
+    });
+});
 
+//Route::middleware(['auth:web'])->group(function () {
+    Route::controller(\App\Http\Controllers\web\HomeController::class)->group(function () {
+        Route::get('/', 'index')->name('home');
+    });
 
+    Route::controller(\App\Http\Controllers\web\ShopController::class)->group(function () {
+        Route::get('shop', 'index')->name('shop');
+        Route::get('shop/filter', 'filter')->name('shop-filter');
+        Route::get('product/{slug}', 'detail')->name('product-detail');
+    });
+
+    Route::controller(\App\Http\Controllers\web\CartController::class)->group(function () {
+        Route::get('cart', 'index')->name('cart');
+        Route::get('cartAdd', 'add')->name('cart-add');
+        Route::get('cartUpdate', 'update')->name('cart-update');
+        Route::get('cartDelete', 'delete')->name('cart-delete');
+        Route::get('cartCount', 'count')->name('cart-count');
+    });
+
+    Route::controller(\App\Http\Controllers\web\WishlistController::class)->group(function () {
+        Route::get('wishlist', 'index')->name('wishlist');
+        Route::get('toggle', 'toggle')->name('toggle');
+        Route::get('wishCount', 'count')->name('wishlist-count');
+    });
+//});
+
+Route::get('logout', function (Request $request) {
+    Auth::guard('admin')->logout();
+    return redirect()->route('admin.login');
+})->middleware('auth:admin')->name('logout');

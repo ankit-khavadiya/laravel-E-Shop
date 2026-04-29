@@ -45,7 +45,7 @@
 
 
 
-/* --- Migration --- */
+/* --- Migration Commands --- */
 
 // Create migration :- php artisan make:migration create_admins_table
 // Run :- php artisan migrate

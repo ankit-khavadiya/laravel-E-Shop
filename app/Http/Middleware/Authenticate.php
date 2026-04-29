@@ -22,6 +22,10 @@ class Authenticate
                 return redirect()->route('admin.login');
             }
 
+            if ($guard === 'web') {
+                return redirect()->route('login');
+            }
+
             return redirect()->route('login'); // web user login
         }
         return $next($request);

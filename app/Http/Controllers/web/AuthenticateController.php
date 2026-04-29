@@ -1,24 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ResponseTrait;
 use App\Mail\welcomeemail;
-use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-
 
 class AuthenticateController extends Controller
 {
     use ResponseTrait;
     public function login()
     {
-        return view('admin.pages.login');
+        return view('web.pages.login');
+    }
+
+    public function register()
+    {
+        return view('web.pages.register');
     }
 
     public function postLogin(Request $request)
@@ -36,7 +39,7 @@ class AuthenticateController extends Controller
             $login = Auth::guard('admin')->attempt(['email' => $request->get('email'), 'password' => $request->get('password')]);
 
             if ($login) {
-                $name = Admin::where('email', $request->email)->first();
+                $name = User::where('email', $request->email)->first();
                 $name->update(['last_login_at' => now()]);
                 session(['name' => $name->name]);
                 session(['profile_image' => $name->profile_image]);
@@ -49,7 +52,7 @@ class AuthenticateController extends Controller
                 return $this->sendError('Invalid email or password');
             }
         }catch (\Exception $exception){
-           return $this->sendError($exception->getMessage());
+            return $this->sendError($exception->getMessage());
         }
     }
 }

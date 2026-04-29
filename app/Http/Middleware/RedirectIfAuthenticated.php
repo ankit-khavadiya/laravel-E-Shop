@@ -22,6 +22,10 @@ class RedirectIfAuthenticated
                 return redirect()->route('admin.home');
             }
 
+            if ($guard === 'web') {
+                return redirect()->route('home');
+            }
+
             return redirect()->route('home'); // user dashboard
         }
         return $next($request);

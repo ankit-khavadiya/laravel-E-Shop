@@ -1,199 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Shop Admin | Register</title>
+@extends('web.master')
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+@section('title', 'Register - E-Shop')
 
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@section('content')
+    <div class="auth-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="auth-card" data-aos="fade-up">
+                        <div class="auth-header">
+                            <h2>Create Account 🚀</h2>
+                            <p>Join us and start shopping!</p>
+                        </div>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/dashboard.css')}}">
+                        <div class="auth-body">
+                            <form method="POST" action="{{ route('register') }}" id="registerForm">
+                                @csrf
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>" type="image/x-icon">
-</head>
-<body>
-<div class="auth-container">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h2><i class="fas fa-shopping-bag me-2"></i>E-Shop Admin</h2>
-            <p>Create your admin account</p>
-        </div>
-        <div class="auth-body">
-            <form id="registerForm">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-user"></i>
-                                </span>
-                            <input type="text" class="form-control" id="firstName" placeholder="John" required>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror"
+                                               value="{{ old('first_name') }}" required>
+                                        @error('first_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror"
+                                               value="{{ old('last_name') }}" required>
+                                        @error('last_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                           value="{{ old('email') }}" required>
+                                    @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                                           value="{{ old('phone') }}">
+                                    @error('phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                                               id="password" required>
+                                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    @error('password')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                    <div class="password-strength mt-2">
+                                        <small class="text-muted">Password strength:</small>
+                                        <div class="progress mt-1" style="height: 4px;">
+                                            <div class="progress-bar" id="strengthBar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <input type="password" name="password_confirmation" class="form-control" id="passwordConfirmation" required>
+                                        <button class="btn btn-outline-secondary toggle-confirm-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div id="passwordMatchMsg" class="mt-2"></div>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="terms" id="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 mb-3">
+                                    <i class="fas fa-user-plus me-2"></i> Create Account
+                                </button>
+
+                                <div class="divider">
+                                    <span>or sign up with</span>
+                                </div>
+
+                                <div class="social-login">
+                                    <button type="button" class="btn-google">
+                                        <i class="fab fa-google"></i> Google
+                                    </button>
+                                    <button type="button" class="btn-facebook">
+                                        <i class="fab fa-facebook-f"></i> Facebook
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="auth-footer">
+                            <p>Already have an account? <a href="{{ route('login') }}">Sign in</a></p>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-user"></i>
-                                </span>
-                            <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
-                        </div>
-                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="registerEmail" class="form-label">Email Address</label>
-                    <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                        <input type="email" class="form-control" id="registerEmail" placeholder="john.doe@example.com" required>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="registerPassword" class="form-label">Password</label>
-                    <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                        <input type="password" class="form-control" id="registerPassword" placeholder="Create a password" required>
-                        <button class="btn btn-outline-secondary" type="button" id="toggleRegisterPassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="form-text">Must be at least 8 characters long</div>
-                </div>
-                <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-lock"></i>
-                            </span>
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
-                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="agreeTerms" required>
-                    <label class="form-check-label" for="agreeTerms">
-                        I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary w-100 mb-3">
-                    <i class="fas fa-user-plus me-2"></i> Create Account
-                </button>
-                <div class="text-center mb-3">
-                    <span class="text-muted">Or sign up with</span>
-                </div>
-                <div class="d-grid gap-2 mb-4">
-                    <button type="button" class="btn btn-outline-primary">
-                        <i class="fab fa-google me-2"></i> Google
-                    </button>
-                    <button type="button" class="btn btn-outline-primary">
-                        <i class="fab fa-microsoft me-2"></i> Microsoft
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="auth-footer">
-            <p>Already have an account? <a href="{{ route('login') }}" class="text-decoration-none">Sign in</a></p>
-            <p class="mb-0"><a href="{{route('home')}}" class="text-decoration-none"><i class="fas fa-arrow-left me-1"></i> Back to Dashboard</a></p>
+            </div>
         </div>
     </div>
-</div>
+@endsection
 
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section('scripts')
+    <script>
+        // Password strength checker
+        $('#password').on('input', function() {
+            let password = $(this).val();
+            let strength = 0;
 
-<!-- Custom JS -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle password visibility for register password
-        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
-        const registerPasswordInput = document.getElementById('registerPassword');
+            if (password.length >= 8) strength += 25;
+            if (password.match(/[a-z]/)) strength += 25;
+            if (password.match(/[A-Z]/)) strength += 25;
+            if (password.match(/[0-9]/)) strength += 25;
+            if (password.match(/[^a-zA-Z0-9]/)) strength += 25;
 
-        if (toggleRegisterPassword && registerPasswordInput) {
-            toggleRegisterPassword.addEventListener('click', function() {
-                const type = registerPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                registerPasswordInput.setAttribute('type', type);
+            if (strength > 100) strength = 100;
 
-                // Toggle eye icon
-                const icon = this.querySelector('i');
-                if (type === 'password') {
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
+            $('#strengthBar').css('width', strength + '%');
+
+            if (strength <= 25) {
+                $('#strengthBar').removeClass('bg-success bg-warning').addClass('bg-danger');
+            } else if (strength <= 50) {
+                $('#strengthBar').removeClass('bg-success bg-danger').addClass('bg-warning');
+            } else {
+                $('#strengthBar').removeClass('bg-danger bg-warning').addClass('bg-success');
+            }
+
+            checkPasswordMatch();
+        });
+
+        // Check password match
+        function checkPasswordMatch() {
+            let password = $('#password').val();
+            let confirm = $('#passwordConfirmation').val();
+
+            if (confirm.length > 0) {
+                if (password === confirm) {
+                    $('#passwordMatchMsg').html('<small class="text-success"><i class="fas fa-check-circle"></i> Passwords match</small>');
                 } else {
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
+                    $('#passwordMatchMsg').html('<small class="text-danger"><i class="fas fa-times-circle"></i> Passwords do not match</small>');
                 }
-            });
+            } else {
+                $('#passwordMatchMsg').html('');
+            }
         }
 
-        // Toggle password visibility for confirm password
-        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
+        $('#passwordConfirmation').on('input', checkPasswordMatch);
 
-        if (toggleConfirmPassword && confirmPasswordInput) {
-            toggleConfirmPassword.addEventListener('click', function() {
-                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                confirmPasswordInput.setAttribute('type', type);
-
-                // Toggle eye icon
-                const icon = this.querySelector('i');
-                if (type === 'password') {
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                } else {
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                }
-            });
-        }
-
-        // Register form submission
-        const registerForm = document.getElementById('registerForm');
-        if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('registerEmail').value;
-                const password = document.getElementById('registerPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-
-                // Validation
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match!');
-                    return;
-                }
-
-                if (password.length < 8) {
-                    alert('Password must be at least 8 characters long!');
-                    return;
-                }
-
-                // In a real app, this would be sent to a backend
-                // For demo purposes, we'll just redirect to login
-                alert('Registration successful! You can now login.');
-                window.location.href = 'login.html';
-            });
-        }
-
-        // Dark mode for register page
-        const darkModePreference = localStorage.getItem('darkMode') === 'true';
-        if (darkModePreference) {
-            document.body.classList.add('dark-mode');
-        }
-    });
-</script>
-</body>
-</html>
+        // Toggle password visibility
+        $('.toggle-password, .toggle-confirm-password').click(function() {
+            let target = $(this).prev('input');
+            let type = target.attr('type') === 'password' ? 'text' : 'password';
+            target.attr('type', type);
+            $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+        });
+    </script>
+@endsection

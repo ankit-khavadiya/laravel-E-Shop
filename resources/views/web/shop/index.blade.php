@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('web.master')
 
 @section('title', 'Shop - E-Shop')
 
-@section('content')
+@section('page-content')
     <div class="shop-section">
         <div class="page-header">
             <div class="container">
@@ -50,16 +50,16 @@
 
                         <div class="filter-widget">
                             <h4>Brands</h4>
-                            <ul class="filter-list">
-                                @foreach($brands as $brand)
-                                    <li>
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" value="{{ $brand->id }}" class="brand-filter">
-                                            <span>{{ $brand->name }}</span>
-                                        </label>
-                                    </li>
-                                @endforeach
-                            </ul>
+{{--                            <ul class="filter-list">--}}
+{{--                                @foreach($brands as $brand)--}}
+{{--                                    <li>--}}
+{{--                                        <label class="checkbox-label">--}}
+{{--                                            <input type="checkbox" value="{{ $brand->id }}" class="brand-filter">--}}
+{{--                                            <span>{{ $brand->name }}</span>--}}
+{{--                                        </label>--}}
+{{--                                    </li>--}}
+{{--                                @endforeach--}}
+{{--                            </ul>--}}
                         </div>
 
                         <div class="filter-widget">
@@ -88,7 +88,9 @@
                 <div class="col-lg-9">
                     <div class="shop-header">
                         <div class="showing-results">
-                            Showing <span id="showingCount">0</span> of <span id="totalCount">{{ $products->total() }}</span> results
+                            Showing <span id="showingCount">0</span> of <span id="totalCount">
+{{--                                {{ $products->total() }}--}}
+                            </span> results
                         </div>
                         <div class="sort-options">
                             <select id="sortBy" class="form-select">
@@ -118,7 +120,7 @@
                                         </a>
                                     </div>
                                     <div class="product-image">
-                                        <img src="{{ asset('storage/products/' . $product->image) }}" alt="{{ $product->name }}">
+                                        <img src="{{ asset('upload/product/' . $product->image) }}" alt="{{ $product->name }}">
                                         <div class="hover-overlay">
                                             <button class="add-to-cart-btn" data-id="{{ $product->id }}">
                                                 <i class="fas fa-shopping-bag"></i> Quick Add
@@ -136,7 +138,7 @@
                                             @endfor
                                         </div>
                                         <h4 class="product-title">
-                                            <a href="{{ route('product.detail', $product->slug) }}">{{ $product->name }}</a>
+                                            <a href="{{ route('product-slug', ['slug' => $product->name]) }}">{{ $product->name }}</a>
                                         </h4>
                                         <div class="product-price">
                                             @if($product->discount_price)
@@ -153,7 +155,7 @@
                     </div>
 
                     <div class="pagination-wrapper mt-5">
-                        {{ $products->links() }}
+{{--                        {{ $products->links() }}--}}
                     </div>
                 </div>
             </div>

@@ -34,6 +34,14 @@ trait ResponseTrait
         ],$code);
     }
 
+    function sendException($message){
+        return response()->json([
+            'status'  => false,
+            'message' => "Something went wrong !",
+            'exception' => $message,
+        ],500);
+    }
+
     function sendValidationError($data){
         return response()->json([
             'status'  => false,

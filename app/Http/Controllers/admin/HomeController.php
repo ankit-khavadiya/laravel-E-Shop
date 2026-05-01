@@ -24,6 +24,7 @@ class HomeController extends Controller
         return view('admin.pages.admin-profile', compact('adminDetails'));
     }
 
+    // Update admin profile
     public function adminProfileEdit(Request $request){
         try{
             $validator = Validator::make($request->all(),[
@@ -49,6 +50,7 @@ class HomeController extends Controller
         }
     }
 
+    // Update admin image
     public function adminProfileImage(Request $request)
     {
         try {
@@ -85,7 +87,7 @@ class HomeController extends Controller
         }
     }
 
-
+    // Change password
     public function adminChangePassword(Request $request){
         try{
             $validator = Validator::make($request->all(),[

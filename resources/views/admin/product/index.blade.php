@@ -224,7 +224,7 @@
                         processData: false,
                         contentType: false,
                         beforeSend:function (){
-                            $('.field-error,span').text('').hide();
+                            $('.field-error').text('').hide();
                             $('.error').removeClass('error text-danger');
                             $('#saveProductBtn').attr('disabled', true);
                         },

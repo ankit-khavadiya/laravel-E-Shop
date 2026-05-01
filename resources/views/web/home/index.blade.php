@@ -157,7 +157,7 @@
                                 </a>
                             </div>
                             <div class="product-image">
-                                <img src="{{ asset('storage/products/' . $product->image) }}" alt="{{ $product->name }}">
+                                <img src="{{ asset('upload/product/' . $product->image) }}" alt="{{ $product->name }}">
                                 <div class="hover-overlay">
                                     <button class="add-to-cart-btn" data-id="{{ $product->id }}">
                                         <i class="fas fa-shopping-bag me-2"></i> Add to Cart
@@ -176,7 +176,7 @@
                                     <span>({{ $product->reviews_count }})</span>
                                 </div>
                                 <h4 class="product-title">
-                                    <a href="{{ route('product.detail', $product->slug) }}">{{ $product->name }}</a>
+                                    <a href="{{ route('product-slug', ['slug' => $product->name]) }}">{{ $product->name }}</a>
                                 </h4>
                                 <div class="product-price">
                                     @if($product->discount_price)
@@ -241,33 +241,33 @@
                 <p class="section-text">Join thousands of satisfied customers worldwide</p>
             </div>
 
-            <div class="testimonials-slider" data-aos="fade-up">
-                <div class="swiper-wrapper">
-                    @foreach($testimonials as $testimonial)
-                        <div class="swiper-slide">
-                            <div class="testimonial-card">
-                                <div class="testimonial-quote">
-                                    <i class="fas fa-quote-left"></i>
-                                </div>
-                                <div class="testimonial-rating">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <i class="fas fa-star"></i>
-                                    @endfor
-                                </div>
-                                <p class="testimonial-text">{{ $testimonial->comment }}</p>
-                                <div class="testimonial-author">
-                                    <img src="{{ asset('storage/testimonials/' . $testimonial->image) }}" alt="{{ $testimonial->name }}">
-                                    <div>
-                                        <h5>{{ $testimonial->name }}</h5>
-                                        <span>{{ $testimonial->position }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
+{{--            <div class="testimonials-slider" data-aos="fade-up">--}}
+{{--                <div class="swiper-wrapper">--}}
+{{--                    @foreach($testimonials as $testimonial)--}}
+{{--                        <div class="swiper-slide">--}}
+{{--                            <div class="testimonial-card">--}}
+{{--                                <div class="testimonial-quote">--}}
+{{--                                    <i class="fas fa-quote-left"></i>--}}
+{{--                                </div>--}}
+{{--                                <div class="testimonial-rating">--}}
+{{--                                    @for($i = 1; $i <= 5; $i++)--}}
+{{--                                        <i class="fas fa-star"></i>--}}
+{{--                                    @endfor--}}
+{{--                                </div>--}}
+{{--                                <p class="testimonial-text">{{ $testimonial->comment }}</p>--}}
+{{--                                <div class="testimonial-author">--}}
+{{--                                    <img src="{{ asset('storage/testimonials/' . $testimonial->image) }}" alt="{{ $testimonial->name }}">--}}
+{{--                                    <div>--}}
+{{--                                        <h5>{{ $testimonial->name }}</h5>--}}
+{{--                                        <span>{{ $testimonial->position }}</span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    @endforeach--}}
+{{--                </div>--}}
+{{--                <div class="swiper-pagination"></div>--}}
+{{--            </div>--}}
         </div>
     </section>
 
@@ -415,7 +415,7 @@
             let icon = $(this).find('i');
 
             $.ajax({
-                url: "{{ route('wishlist.toggle') }}",
+                url: "{{ route('toggle') }}",
                 type: "POST",
                 data: {
                     product_id: productId,

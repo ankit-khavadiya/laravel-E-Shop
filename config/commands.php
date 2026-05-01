@@ -209,3 +209,10 @@
 // composer require google-gemini-php/laravel
 // php artisan gemini:install
 // GEMINI_API_KEY=your_api_key_here
+
+
+
+/* --- Implement Google login --- */
+
+// install package :- composer require kreait/laravel-firebase
+

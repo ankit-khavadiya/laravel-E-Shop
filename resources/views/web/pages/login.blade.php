@@ -16,35 +16,32 @@
                         <div class="auth-body">
                             <form method="POST" action="{{ route('login') }}" id="loginForm">
                                 @csrf
-
                                 <div class="form-group mb-3">
                                     <label class="form-label">Email Address</label>
                                     <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-envelope"></i>
-                                    </span>
-                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                               value="{{ old('email') }}" required autofocus>
+                                        <span class="input-group-text">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Enter your email" autofocus>
                                     </div>
                                     @error('email')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        <div class="invalid-feedback d-block" id="loginEmail-error">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label class="form-label">Password</label>
                                     <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                                               id="password" required>
+                                        <span class="input-group-text">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Enter your password">
                                         <button class="btn btn-outline-secondary toggle-password" type="button">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </div>
                                     @error('password')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        <div class="invalid-feedback d-block" id="loginPassword-error">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -58,7 +55,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100 mb-3">
+                                <button type="submit" name="submit" class="btn btn-primary w-100 mb-3" id="loginSubmit">
                                     <i class="fas fa-sign-in-alt me-2"></i> Sign In
                                 </button>
 
@@ -67,7 +64,7 @@
                                 </div>
 
                                 <div class="social-login">
-                                    <button type="button" class="btn-google">
+                                    <button type="button" class="btn-google" id="loginWithGoogleBtn">
                                         <i class="fab fa-google"></i> Google
                                     </button>
                                     <button type="button" class="btn-facebook">
@@ -78,7 +75,7 @@
                         </div>
 
                         <div class="auth-footer">
-                            <p class="text-center">Don't have an account? <a href="{{ route('register') }}">Sign up now</a></p>
+                            <p class="text-center">Don't have an account? <a href="{{ route('register') }}">Register now</a></p>
                         </div>
                     </div>
                 </div>
@@ -95,6 +92,59 @@
             let type = password.attr('type') === 'password' ? 'text' : 'password';
             password.attr('type', type);
             $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+        });
+
+        $(document).ready(function (){
+            $('#loginForm').validate({
+                rules:{
+                    email:{ required:true, email:true },
+                    password:{ required:true }
+                },
+                messages:{
+                    email:{
+                        required:"please enter email",
+                        email:"please enter valid email format"
+                    },
+                    password:{
+                        required:"please enter password",
+                    }
+                },
+                errorClass : "error gt-s1error text-danger",
+                submitHandler:function (form){
+                    var formData = new FormData(form)
+                    $.ajax({
+                        url:"{{route('post-login')}}",
+                        method: "POST",
+                        dataType: "JSON",
+                        data: formData,
+                        processData:false,
+                        contentType:false,
+                        beforeSend:function (){
+                            $('#loginSubmit').attr('disabled', true);
+                        },
+                        success:function (response){
+                            window.location.href='{{route('home')}}';
+                        },
+                        error:function (xhr){
+                            let res = xhr.responseJSON;
+
+                            if(res?.errors){
+                                if(res.errors.email){
+                                    $('#loginEmail-error').html(res.errors.email[0]).show();
+                                }
+                                if(res.errors.password){
+                                    $('#loginPassword-error').html(res.errors.password[0]).show();
+                                }
+                            }else if(res?.message){
+                                toastr.error(res.message);
+                            }
+                        },
+                        complete(){
+                            $('#loginSubmit').attr('disabled', false);
+                        }
+                    });
+                },
+            });
         });
     </script>
 @endsection

@@ -78,19 +78,31 @@ Route::middleware(['guest:web'])->group(function () {
         Route::get('login','login')->name('login');
         Route::get('register','register')->name('register');
         Route::post('post-login','postLogin')->name('post-login');
-        Route::post('post-register','postRegister')->name('register-login');
+        Route::post('post-register','postRegister')->name('post-register');
+        Route::post('google-login', 'googleLogin')->name('google-login');
     });
 });
 
-//Route::middleware(['auth:web'])->group(function () {
+Route::middleware(['auth:web'])->group(function () {
     Route::controller(\App\Http\Controllers\web\HomeController::class)->group(function () {
         Route::get('/', 'index')->name('home');
+    });
+
+    Route::controller(\App\Http\Controllers\web\UserProfileController::class)->group(function () {
+        Route::get('user-profile', 'index')->name('user-profile');
+        Route::get('stats', 'getStats')->name('stats');
+        Route::get('recent-orders', 'getRecentOrders')->name('recent-orders');
+        Route::get('all-orders', 'getAllOrders')->name('all-orders');
+        Route::post('upload-image', 'uploadImage')->name('upload-image');
+        Route::post('profile/update', 'updateProfile')->name('profile-update');
+        Route::post('password/change', 'changePassword')->name('password-change');
+        Route::delete('delete', 'deleteAccount')->name('delete');
     });
 
     Route::controller(\App\Http\Controllers\web\ShopController::class)->group(function () {
         Route::get('shop', 'index')->name('shop');
         Route::get('shop/filter', 'filter')->name('shop-filter');
-        Route::get('product/{slug}', 'detail')->name('product-detail');
+        Route::get('product/{slug}', 'detail')->name('product-slug');
     });
 
     Route::controller(\App\Http\Controllers\web\CartController::class)->group(function () {
@@ -106,9 +118,9 @@ Route::middleware(['guest:web'])->group(function () {
         Route::get('toggle', 'toggle')->name('toggle');
         Route::get('wishCount', 'count')->name('wishlist-count');
     });
-//});
 
-Route::get('logout', function (Request $request) {
-    Auth::guard('admin')->logout();
-    return redirect()->route('admin.login');
-})->middleware('auth:admin')->name('logout');
+    Route::get('logout', function (Request $request) {
+        Auth::guard('web')->logout();
+        return redirect()->route('home');
+    })->middleware('auth:web')->name('user-logout');
+});

@@ -56,14 +56,14 @@
                     @auth
                         <div class="dropdown user-dropdown">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-                                <img src="{{ Auth::user()->profile_image ?? asset('frontend/images/default-avatar.png') }}" alt="User" class="user-avatar">
+                                <img src="{{ asset('upload/'.Auth::user()->profile_image) ?? asset('frontend/images/default-avatar.png') }}" alt="User" class="user-avatar">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('account.dashboard') }}"><i class="fas fa-user me-2"></i>My Account</a></li>
-                                <li><a class="dropdown-item" href="{{ route('account.orders') }}"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
+                                <li><a class="dropdown-item" href="{{route('user-profile')}}"><i class="fas fa-user me-2"></i>My Account</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-bag me-2"></i>My Orders</a></li>
                                 <li><a class="dropdown-item" href="{{ route('wishlist') }}"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ route('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user-logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                             </ul>
                         </div>
                     @else

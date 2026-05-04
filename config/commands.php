@@ -1,5 +1,10 @@
 <?php
 
+/* --- Git commands --- */
+
+// clone repo :- git clone -b dev_ankit repo_link
+
+
 /* --- Create Laravel project --- */
 
 // Global installation

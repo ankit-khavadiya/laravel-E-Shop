@@ -14,7 +14,7 @@
                         </div>
 
                         <div class="auth-body">
-                            <form method="POST" action="{{ route('login') }}" id="loginForm">
+                            <form id="loginForm">
                                 @csrf
                                 <div class="form-group mb-3">
                                     <label class="form-label">Email Address</label>
@@ -22,11 +22,9 @@
                                         <span class="input-group-text">
                                             <i class="fas fa-envelope"></i>
                                         </span>
-                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Enter your email" autofocus>
+                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Enter your email">
                                     </div>
-                                    @error('email')
-                                        <div class="invalid-feedback d-block" id="loginEmail-error">{{ $message }}</div>
-                                    @enderror
+                                    <label id="email-error" class="error text-danger" for="email" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-3">
@@ -40,9 +38,7 @@
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </div>
-                                    @error('password')
-                                        <div class="invalid-feedback d-block" id="loginPassword-error">{{ $message }}</div>
-                                    @enderror
+                                    <label id="password-error" class="error text-danger" for="password" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-4">
@@ -67,7 +63,7 @@
                                     <button type="button" class="btn-google" id="loginWithGoogleBtn">
                                         <i class="fab fa-google"></i> Google
                                     </button>
-                                    <button type="button" class="btn-facebook">
+                                    <button type="button" class="btn-facebook" id="loginWithFacebookBtn">
                                         <i class="fab fa-facebook-f"></i> Facebook
                                     </button>
                                 </div>
@@ -84,7 +80,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('webJs')
     <script>
         // Toggle password visibility
         $('.toggle-password').click(function() {
@@ -109,7 +105,6 @@
                         required:"please enter password",
                     }
                 },
-                errorClass : "error gt-s1error text-danger",
                 submitHandler:function (form){
                     var formData = new FormData(form)
                     $.ajax({

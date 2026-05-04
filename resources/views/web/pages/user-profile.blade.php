@@ -3,364 +3,6 @@
 @section('title', 'My Profile - E-Shop')
 
 @section('page-content')
-    <style>
-        /* Profile Section Styles */
-        .profile-section {
-            padding: 60px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        .profile-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        /* Profile Sidebar */
-        .profile-sidebar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 30px;
-            color: white;
-            height: 100%;
-        }
-
-        .avatar-wrapper {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto;
-            cursor: pointer;
-        }
-
-        .profile-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .avatar-overlay {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #667eea;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .avatar-overlay:hover {
-            transform: scale(1.1);
-        }
-
-        .profile-sidebar h4 {
-            font-weight: 700;
-            margin-bottom: 5px;
-            margin-top: 15px;
-        }
-
-        .profile-menu {
-            list-style: none;
-            padding: 0;
-            margin-top: 30px;
-        }
-
-        .profile-menu li {
-            margin-bottom: 10px;
-        }
-
-        .profile-menu li a,
-        .profile-menu li button {
-            display: block;
-            padding: 12px 20px;
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: left;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .profile-menu li.active a,
-        .profile-menu li a:hover,
-        .profile-menu li button:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .profile-menu li a i,
-        .profile-menu li button i {
-            width: 25px;
-            margin-right: 10px;
-        }
-
-        /* Profile Content */
-        .profile-content {
-            padding: 40px;
-            background: white;
-        }
-
-        .profile-header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        .profile-header h2 {
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: #1f2937;
-        }
-
-        .profile-header p {
-            color: #6b7280;
-            margin: 0;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid #e5e7eb;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .stats-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-        }
-
-        .stats-icon i {
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .stats-card h3 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: #1f2937;
-        }
-
-        .stats-card p {
-            color: #6b7280;
-            margin: 0;
-        }
-
-        /* Profile Cards */
-        .profile-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 25px;
-        }
-
-        .profile-card .card-header {
-            background: white;
-            padding: 20px 25px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .profile-card .card-header h4 {
-            margin: 0;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .profile-card .card-header h4 i {
-            color: #667eea;
-            margin-right: 10px;
-        }
-
-        .profile-card .card-body {
-            padding: 25px;
-        }
-
-        /* Form Styles */
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #1f2937;
-        }
-
-        .form-control, .form-select {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 10px 15px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-outline-danger {
-            border: 1px solid #ef4444;
-            color: #ef4444;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 500;
-        }
-
-        .btn-outline-danger:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .profile-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
-        }
-
-        /* Table Styles */
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .table {
-            width: 100%;
-            margin-bottom: 0;
-        }
-
-        .table th {
-            background: #f8f9fa;
-            padding: 12px;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .table td {
-            padding: 12px;
-            vertical-align: middle;
-        }
-
-        .badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .badge-success {
-            background: #10b981;
-            color: white;
-        }
-
-        .badge-warning {
-            background: #f59e0b;
-            color: white;
-        }
-
-        /* Password Strength */
-        .password-strength .progress {
-            height: 4px;
-            border-radius: 2px;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .profile-sidebar {
-                text-align: center;
-            }
-
-            .profile-menu li a,
-            .profile-menu li button {
-                text-align: center;
-            }
-
-            .profile-menu li a i,
-            .profile-menu li button i {
-                margin-right: 0;
-                display: block;
-                margin-bottom: 5px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .profile-section {
-                padding: 20px;
-            }
-
-            .profile-content {
-                padding: 20px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .profile-actions {
-                flex-direction: column;
-            }
-
-            .profile-actions .btn {
-                width: 100%;
-            }
-        }
-    </style>
     <div class="profile-section">
         <div class="container">
             <div class="profile-container">
@@ -369,47 +11,49 @@
                     <div class="col-lg-4">
                         <div class="profile-sidebar">
                             <div class="avatar-wrapper" onclick="document.getElementById('profileImageInput').click()">
-                                <img src="{{ asset('upload/'.Auth::user()->profile_image) ?? asset('frontend/images/default-avatar.png') }}"
+                                <img src="{{ Auth::user()->profile_image ? asset('upload/web'.Auth::user()->profile_image) : asset('assets/images/web/placeholders/user-placeholder.jpg') }}"
                                      alt="Profile Image"
-                                     id="profileImagePreview"
+                                     id="profileImage"
                                      class="profile-img">
-                                <div class="avatar-overlay">
+                                <div class="avatar-overlay" onclick="document.getElementById('profileImageInput').click()">
                                     <i class="fas fa-camera"></i>
                                 </div>
                             </div>
-                            <input type="file" name="profile_image" id="profileImageInput" class="d-none" accept="image/*">
+                            <form id="imageUploadForm" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ Auth::user()->id }}">
+                                <input type="file" name="image" id="profileImageInput" class="d-none" accept="image/*">
+                                <label id="profileImageInput-error" class="error gt-s1error text-danger" for="profileImageInput" style="display: none"></label>
+                            </form>
 
                             <h4 id="userName">{{ Auth::user()->name }}</h4>
                             <p>{{ Auth::user()->email }}</p>
 
                             <ul class="profile-menu">
                                 <li class="active" data-tab="dashboard">
-                                    <a href="javascript:void(0)" class="tab-link" data-tab="dashboard">
+                                    <a href="#" onclick="showTab('dashboard'); return false;">
                                         <i class="fas fa-tachometer-alt"></i> Dashboard
                                     </a>
                                 </li>
                                 <li data-tab="profile">
-                                    <a href="javascript:void(0)" class="tab-link" data-tab="profile">
+                                    <a href="#" onclick="showTab('profile'); return false;">
                                         <i class="fas fa-user"></i> My Profile
                                     </a>
                                 </li>
                                 <li data-tab="orders">
-                                    <a href="javascript:void(0)" class="tab-link" data-tab="orders">
+                                    <a href="#" onclick="showTab('orders'); return false;">
                                         <i class="fas fa-shopping-bag"></i> My Orders
                                     </a>
                                 </li>
                                 <li data-tab="security">
-                                    <button class="tab-link" data-tab="security">
+                                    <a href="#" onclick="showTab('security'); return false;">
                                         <i class="fas fa-key"></i> Security
-                                    </button>
+                                    </a>
                                 </li>
                                 <li>
                                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="fas fa-sign-out-alt"></i> Logout
                                     </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -729,23 +373,8 @@
 
 @endsection
 
-@section('scripts')
+@section('webJs')
     <script>
-        function showTab(tabName) {
-            $('.tab-content').removeClass('active');
-            $('#' + tabName + 'Tab').addClass('active');
-            $('.profile-menu li').removeClass('active');
-            $('.profile-menu li[data-tab="' + tabName + '"]').addClass('active');
-        }
-        $(document).on('click', '.tab-link', function(e) {
-            e.preventDefault();
-
-            let tabName = $(this).data('tab');
-
-            if (!tabName) return; // safety
-
-            showTab(tabName);
-        });
         $(document).ready(function() {
             // Load dashboard stats on page load
             loadDashboardStats();
@@ -753,36 +382,24 @@
             loadAllOrders();
 
             // Tab switching function
-            // // GLOBAL FUNCTION (must be outside document.ready)
-            // function showTab(tabName) {
-            //     document.querySelectorAll('.tab-content').forEach(tab => {
-            //         tab.classList.remove('active');
-            //     });
-            //
-            //     let activeTab = document.getElementById(tabName + 'Tab');
-            //     if (activeTab) {
-            //         activeTab.classList.add('active');
-            //     }
-            //
-            //     document.querySelectorAll('.profile-menu li').forEach(li => {
-            //         li.classList.remove('active');
-            //     });
-            //
-            //     let activeMenu = document.querySelector('.profile-menu li[data-tab="' + tabName + '"]');
-            //     if (activeMenu) {
-            //         activeMenu.classList.add('active');
-            //     }
-            //
-            //     // Optional loading
-            //     if (tabName === 'dashboard') {
-            //         loadDashboardStats();
-            //         loadRecentOrders();
-            //     } else if (tabName === 'orders') {
-            //         loadAllOrders();
-            //     }
-            // }
+            window.showTab = function(tabName) {
+                // Hide all tabs
+                $('.tab-content').removeClass('active');
+                // Show selected tab
+                $('#' + tabName + 'Tab').addClass('active');
 
+                // Update active menu
+                $('.profile-menu li').removeClass('active');
+                $('.profile-menu li[data-tab="' + tabName + '"]').addClass('active');
 
+                // Load data based on tab
+                if (tabName === 'dashboard') {
+                    loadDashboardStats();
+                    loadRecentOrders();
+                } else if (tabName === 'orders') {
+                    loadAllOrders();
+                }
+            };
 
             // Load dashboard statistics
             function loadDashboardStats() {
@@ -804,7 +421,7 @@
                     type: "GET",
                     success: function(response) {
                         let html = '';
-                        if (response.orders.length === 0) {
+                        if (!response.orders) {
                             html = '<tr><td colspan="5" class="text-center">No orders yet</td></tr>';
                         } else {
                             response.orders.forEach(order => {
@@ -831,7 +448,7 @@
                     type: "GET",
                     success: function(response) {
                         let html = '';
-                        if (response.orders.length === 0) {
+                        if (!response.orders) {
                             html = '<tr><td colspan="6" class="text-center">No orders found</td></tr>';
                         } else {
                             response.orders.forEach(order => {
@@ -853,39 +470,41 @@
             }
 
             // Profile Image Upload
-            $('#profileImageInput').change(function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#profileImagePreview').attr('src', e.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                    uploadProfileImage(file);
-                }
+            $('#profileImageInput').on('change', function () {
+                $('#imageUploadForm').submit();
             });
 
-            function uploadProfileImage(file) {
-                const formData = new FormData();
-                formData.append('profile_image', file);
-                formData.append('_token', '{{ csrf_token() }}');
+            $('#imageUploadForm').validate({
+                rules: {
+                    image: { required: true },
+                },
+                submitHandler: function (form) {
+                    let formData = new FormData(form);
+                    $.ajax({
+                        url: "{{ route('user-profile-image') }}",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (res) {
+                            const imageUrl = "{{ asset('upload') }}/web/" + res.data;
 
-                $.ajax({
-                    url: "{{ route('upload-image') }}",
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire('Success!', 'Profile picture updated', 'success');
+                            $('.profile-img').attr('src', imageUrl + '?t=' + new Date().getTime()); // cache busting
+
+                            toastr.success(res.message);
+                            $('#userProfileImage-error').hide();
+                        },
+                        error: function (xhr) {
+                            const res = xhr.responseJSON;
+                            if (res?.error?.image) {
+                                $('#profileImageInput-error').html(res.error.image[0]).show();
+                            } else {
+                                toastr.error('Image upload failed');
+                            }
                         }
-                    },
-                    error: function() {
-                        Swal.fire('Error!', 'Failed to upload image', 'error');
-                    }
-                });
-            }
+                    });
+                }
+            });
 
             // Profile Form Submission
             $('#profileForm').submit(function(e) {

@@ -14,25 +14,24 @@
                         </div>
 
                         <div class="auth-body">
-                            <form method="POST" action="{{ route('register') }}" id="registerForm">
+                            <form id="registerForm">
                                 @csrf
-
                                 <div class="form-group mb-3">
                                     <label class="form-label">Name</label>
-                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Enter your name">
-                                    <div class="error invalid-feedback" id="name-error" style="display: none"></div>
+                                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" placeholder="Enter your name">
+                                    <label id="name-error" class="error text-danger" for="name" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label class="form-label">Email Address</label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Enter your email">
-                                    <div class="error invalid-feedback" id="email-error" style="display: none"></div>
+                                    <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Enter your email">
+                                    <label id="email-error" class="error text-danger" for="email" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label class="form-label">Phone Number</label>
                                     <input type="tel" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="Enter your phone number">
-                                    <div class="error invalid-feedback" id="phone-error" style="display: none"></div>
+                                    <label class="error" id="phone-error" for="phone" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-3">
@@ -42,8 +41,8 @@
                                         <button class="btn btn-outline-secondary toggle-password" type="button">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <div class="error invalid-feedback" id="password-error" style="display: none"></div>
                                     </div>
+                                    <label id="password-error" class="error text-danger" for="password" style="display: none"></label>
                                     <div class="invalid-feedback d-block"></div>
                                     <div class="password-strength mt-2">
                                         <small class="text-muted">Password strength:</small>
@@ -61,7 +60,7 @@
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </div>
-                                    <div id="passwordMatchMsg" class="mt-2" style="display: none"></div>
+                                    <label id="passwordConfirmation-error" class="error text-danger" for="passwordConfirmation" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-4">
@@ -71,9 +70,10 @@
                                             I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
                                         </label>
                                     </div>
+                                    <label id="terms-error" class="error text-danger" for="terms" style="display: none"></label>
                                 </div>
 
-                                <button type="submit" name="submit" class="btn btn-primary w-100 mb-3">
+                                <button type="submit" name="submit" id="submit" class="btn btn-primary w-100 mb-3">
                                     <i class="fas fa-user-plus me-2"></i> Create Account
                                 </button>
 
@@ -85,7 +85,7 @@
                                     <button type="button" class="btn-google" id="loginWithGoogleBtn">
                                         <i class="fab fa-google"></i> Google
                                     </button>
-                                    <button type="button" class="btn-facebook">
+                                    <button type="button" class="btn-facebook" id="loginWithFacebookBtn">
                                         <i class="fab fa-facebook-f"></i> Facebook
                                     </button>
                                 </div>
@@ -102,7 +102,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('webJs')
     <script>
         $(document).ready(function (){
             // Password strength checker
@@ -158,7 +158,7 @@
             });
 
             // Register form submit
-            $('#RegisterForm').validate({
+            $('#registerForm').validate({
                 rules:{
                     name:{
                         required:true
@@ -172,12 +172,32 @@
                     },
                     password_confirmation:{
                         required:true
+                    },
+                    terms:{
+                        required:true
+                    }
+                },
+                messages:{
+                    name:{
+                        required:"please enter your name",
+                    },
+                    email:{
+                        required:"please enter your email",
+                        email:"please enter valid email format"
+                    },
+                    password:{
+                        required:"please enter password",
+                    },
+                    password_confirmation:{
+                        required:"please enter confirm password",
+                    },
+                    term:{
+                        required:"please read terms and privacy",
                     }
                 },
                 submitHandler:function (form, e){
                     e.preventDefault();
                     var formData = new FormData(form)
-
                     $.ajax({
                         url:'{{route('post-register')}}',
                         method:'POST',
@@ -185,10 +205,11 @@
                         data:formData,
                         processData:false,
                         contentType:false,
+                        beforeSend:function (){
+                            $('#submit').attr('disabled', true);
+                        },
                         success:function (response){
-                            if(response.success){
-                                window.location.href='{{route('login')}}';
-                            }
+                            window.location.href='{{route('login')}}';
                         },
                         error: function (xhr) {
                             var errorMessage = JSON.parse(xhr.responseText);
@@ -209,6 +230,9 @@
                                     $('#message-error').html(errorMessage.message).show();
                                 }
                             }
+                        },
+                        complete(){
+                            $('#submit').attr('disabled', false);
                         }
                     });
                 }

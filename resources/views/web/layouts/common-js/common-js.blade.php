@@ -56,17 +56,17 @@
 </script>
 <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js';
+    import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js';
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyDxdaMqyfIhoT2OH5_utOA3X_NC86bRZp8",
-        authDomain: "socially-95652.firebaseapp.com",
-        projectId: "socially-95652",
-        storageBucket: "socially-95652.firebasestorage.app",
-        messagingSenderId: "745363722960",
-        appId: "1:745363722960:web:c9ddd436e5c82537b044d5",
-        measurementId: "G-WLYRDMNXJ5"
+        apiKey: "AIzaSyCsOg_xujzNWZq4kggtsKH1_QUDrO2Vizo",
+        authDomain: "laravel-e-shop-abb9f.firebaseapp.com",
+        projectId: "laravel-e-shop-abb9f",
+        storageBucket: "laravel-e-shop-abb9f.firebasestorage.app",
+        messagingSenderId: "899543916987",
+        appId: "1:899543916987:web:88eb017ade3554917a249e",
+        measurementId: "G-W0DJ0XYJHG"
     };
 
     // Initialize Firebase
@@ -114,5 +114,56 @@
             const errorMessage = error.message;
             console.error("Error during Google sign-in:", errorMessage);
         });
+    });
+
+    const fbProvider = new FacebookAuthProvider();
+
+    fbProvider.setCustomParameters({
+        display: 'popup'
+    });
+
+    $('#loginWithFacebookBtn').click(function () {
+
+        let isLoginPage = "{{ request()->segment(1) == 'login'}}";
+
+        signInWithPopup(auth, fbProvider)
+            .then((result) => {
+
+                const user = result.user;
+
+                user.getIdToken().then((idToken) => {
+
+                    $.ajax({
+                        url: "{{ route('facebook-login') }}",
+                        method: "POST",
+                        dataType: "json",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            firebase: idToken,
+                        },
+                        beforeSend: function () {
+                            $("#loginWithFacebookBtn").attr('disabled', true);
+                        },
+                        success: function () {
+                            if (isLoginPage) {
+                                window.location.href = "{{ url()->previous() }}";
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function (xhr) {
+                            toastr.error(xhr.responseJSON.message);
+                        },
+                        complete: function () {
+                            $("#loginWithFacebookBtn").attr('disabled', false);
+                        }
+                    });
+
+                });
+
+            })
+            .catch((error) => {
+                console.error("Facebook login error:", error.message);
+            });
     });
 </script>

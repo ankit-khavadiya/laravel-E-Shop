@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('social_id')->nullable();
             $table->string('provider')->nullable(); // google, facebook
             $table->string('name')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('profile_image')->nullable();

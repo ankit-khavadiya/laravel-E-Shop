@@ -25,13 +25,15 @@
                             <h4>Categories</h4>
                             <ul class="filter-list">
                                 @foreach($categories as $category)
-                                    <li>
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" value="{{ $category->id }}" class="category-filter">
-                                            <span>{{ $category->name }}</span>
-                                            <span class="count">({{ $category->products_count }})</span>
-                                        </label>
-                                    </li>
+                                    @if($category['parent_id'] === 0)
+                                        <li>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" value="{{ $category->id }}" class="category-filter">
+                                                <span>{{ $category->name }}</span>
+                                                <span class="count">({{ $category->products_count }})</span>
+                                            </label>
+                                        </li>
+                                    @endif
                                 @endforeach
                             </ul>
                         </div>
@@ -51,7 +53,7 @@
                             <h4>Brands</h4>
                             <ul class="filter-list">
                                 @foreach($categories as $category)
-                                    @if($category['parent_id'] === 1)
+                                    @if($category['parent_id'] != 0)
                                         <li>
                                             <label class="checkbox-label">
                                                 <input type="checkbox" value="{{ $category->id }}" class="brand-filter">
@@ -116,12 +118,18 @@
                                         <a href="#" class="wishlist-btn" data-id="{{ $product->id }}">
                                             <i class="far fa-heart"></i>
                                         </a>
-                                        <a href="#" class="quick-view-btn" data-id="{{ $product->id }}">
+                                        <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}" class="quick-view-btn" data-id="{{ $product->id }}">
                                             <i class="far fa-eye"></i>
                                         </a>
                                     </div>
                                     <div class="product-image">
-                                        <img src="{{ asset('upload/product/' . $product->image) }}" alt="{{ $product->name }}">
+                                        @php
+                                            $imagePath = public_path('upload/product/' . $product->image);
+                                            $imageUrl = file_exists($imagePath) && !empty($product->image)
+                                                ? asset('upload/product/' . $product->image)
+                                                : asset('assets/images/web/placeholders/no-image.png');
+                                        @endphp
+                                        <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
                                         <div class="hover-overlay">
                                             <button class="add-to-cart-btn" data-id="{{ $product->id }}">
                                                 <i class="fas fa-shopping-bag"></i> Quick Add
@@ -139,7 +147,7 @@
                                             @endfor
                                         </div>
                                         <h4 class="product-title">
-                                            <a href="{{ route('product-slug', ['slug' => $product->name]) }}">{{ $product->name }}</a>
+                                            <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}">{{ $product->name }}</a>
                                         </h4>
                                         <div class="product-price">
                                             @if($product->discount_price)
@@ -185,8 +193,8 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    $('#productsGrid').html(response.html);
-                    $('#showingCount').text(response.count);
+                    $('#productsGrid').html(response.data.html);
+                    $('#showingCount').text(response.data.count);
                 }
             });
         }
@@ -224,6 +232,18 @@
         // Sort by
         $('#sortBy').change(function() {
             filters.sort = $(this).val();
+            applyFilters();
+        });
+
+        $('.rating-filter').change(function() {
+            let value = $(this).val();
+
+            if ($(this).is(':checked')) {
+                filters.ratings.push(value);
+            } else {
+                filters.ratings = filters.ratings.filter(v => v != value);
+            }
+
             applyFilters();
         });
 

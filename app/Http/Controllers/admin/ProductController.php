@@ -28,9 +28,11 @@ class ProductController extends Controller
                     return 'PRO-' . str_pad($row->id, 4, '0', STR_PAD_LEFT);
                 })
                 ->editColumn('image', function ($row) {
-                    $imageUrl = asset('upload/product/' . $row->image);
+                    $imagePath = public_path('upload/product/' . $row->image);
+                    $imageUrl = file_exists($imagePath) && !empty($row->image)
+                        ? asset('upload/product/' . $row->image)
+                        : asset('assets/images/web/placeholders/no-image.png');
                     return "<img src='{$imageUrl}' class='rounded' width='40' height='40'>";
-
                 })
                 ->addColumn('status', function ($row) {
                     $class = $row->is_active == 1 ? 'success' : 'danger';

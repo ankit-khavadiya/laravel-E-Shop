@@ -19,8 +19,11 @@ class ShopController extends Controller
 
     }
 
-    public function detail(){
-
+    public function detail(request $request){
+        $productId = base64_decode($request->slug);
+        $product = Product::where('id', $productId)->with('category')->first();
+        $relatedProducts = Product::where('category_id', $product->category->id)->with('category')->get();
+        return view('web.product.index', compact('product', 'relatedProducts'));
     }
 
 

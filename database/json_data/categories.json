@@ -1,0 +1,30 @@
+[
+    {"parent_id":0,"name":"Electronics","description":"Electronic items","is_active":1},
+    {"parent_id":0,"name":"Fashion","description":"Clothing & accessories","is_active":1},
+    {"parent_id":0,"name":"Home & Kitchen","description":"Home products","is_active":1},
+    {"parent_id":0,"name":"Beauty & Personal Care","description":"Beauty items","is_active":1},
+    {"parent_id":0,"name":"Sports & Fitness","description":"Sports items","is_active":1},
+    {"parent_id":0,"name":"Books","description":"Books collection","is_active":1},
+
+    {"parent_id":1,"name":"Mobile Phones","description":"Smartphones","is_active":1},
+    {"parent_id":1,"name":"Laptops","description":"All laptops","is_active":1},
+    {"parent_id":1,"name":"Headphones","description":"Audio devices","is_active":1},
+    {"parent_id":1,"name":"Smart Watches","description":"Wearables","is_active":1},
+
+    {"parent_id":2,"name":"Men Clothing","description":"Men fashion","is_active":1},
+    {"parent_id":2,"name":"Women Clothing","description":"Women fashion","is_active":1},
+    {"parent_id":2,"name":"Shoes","description":"Footwear","is_active":1},
+    {"parent_id":2,"name":"Bags","description":"Fashion bags","is_active":1},
+
+    {"parent_id":3,"name":"Furniture","description":"Home furniture","is_active":1},
+    {"parent_id":3,"name":"Kitchen Tools","description":"Kitchen accessories","is_active":1},
+
+    {"parent_id":4,"name":"Skincare","description":"Skin products","is_active":1},
+    {"parent_id":4,"name":"Haircare","description":"Hair products","is_active":1},
+
+    {"parent_id":5,"name":"Gym Equipment","description":"Workout gear","is_active":1},
+    {"parent_id":5,"name":"Outdoor Sports","description":"Outdoor games","is_active":1},
+
+    {"parent_id":6,"name":"Fiction","description":"Fiction books","is_active":1},
+    {"parent_id":6,"name":"Education","description":"Study books","is_active":1}
+]

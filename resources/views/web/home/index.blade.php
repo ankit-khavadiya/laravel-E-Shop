@@ -63,66 +63,18 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-mobile-alt"></i>
+                @foreach($popularCategories as $popularCategory)
+                    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="category-card">
+                            <div class="category-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h4>{{$popularCategory['name']}}</h4>
+                            <p>{{$popularCategory['total_products']}} Products</p>
+                            <a href="{{ route('shop-filter', ['filter' => base64_encode($popularCategory['id'])]) }}">Shop Now →</a>
                         </div>
-                        <h4>Electronics</h4>
-                        <p>120 Products</p>
-                        <a href="#">Shop Now →</a>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="150">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-tshirt"></i>
-                        </div>
-                        <h4>Fashion</h4>
-                        <p>350 Products</p>
-                        <a href="#">Shop Now →</a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-home"></i>
-                        </div>
-                        <h4>Home & Living</h4>
-                        <p>280 Products</p>
-                        <a href="#">Shop Now →</a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="250">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-futbol"></i>
-                        </div>
-                        <h4>Sports</h4>
-                        <p>95 Products</p>
-                        <a href="#">Shop Now →</a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <h4>Books</h4>
-                        <p>200 Products</p>
-                        <a href="#">Shop Now →</a>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-delay="350">
-                    <div class="category-card">
-                        <div class="category-icon">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <h4>Toys & Games</h4>
-                        <p>150 Products</p>
-                        <a href="#">Shop Now →</a>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -135,63 +87,78 @@
                 <h2 class="section-title">Best Selling Items</h2>
                 <p class="section-text">Hand-picked products just for you</p>
             </div>
-
-            <div class="row g-4">
-                @foreach($featuredProducts as $product)
-                    <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
-                        <div class="product-card">
-                            <div class="product-badge">
-                                @if($product->discount_price)
-                                    <span class="badge-sale">-{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%</span>
-                                @endif
-                                @if($product->is_featured)
-                                    <span class="badge-featured">Featured</span>
-                                @endif
-                            </div>
-                            <div class="product-actions">
-                                <a href="#" class="wishlist-btn" data-id="{{ $product->id }}">
-                                    <i class="far fa-heart"></i>
-                                </a>
-                                <a href="#" class="quick-view-btn" data-id="{{ $product->id }}">
-                                    <i class="far fa-eye"></i>
-                                </a>
-                            </div>
-                            <div class="product-image">
-                                <img src="{{ asset('upload/product/' . $product->image) }}" alt="{{ $product->name }}">
-                                <div class="hover-overlay">
-                                    <button class="add-to-cart-btn" data-id="{{ $product->id }}">
-                                        <i class="fas fa-shopping-bag me-2"></i> Add to Cart
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <div class="product-rating">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= $product->rating)
-                                            <i class="fas fa-star"></i>
-                                        @else
-                                            <i class="far fa-star"></i>
-                                        @endif
-                                    @endfor
-                                    <span>({{ $product->reviews_count }})</span>
-                                </div>
-                                <h4 class="product-title">
-                                    <a href="{{ route('product-slug', ['slug' => $product->name]) }}">{{ $product->name }}</a>
-                                </h4>
-                                <div class="product-price">
+            @if($featuredProducts)
+                <div class="row g-4">
+                    @foreach($featuredProducts as $product)
+                        <div class="col-lg-3 col-md-4 col-6" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
+                            <div class="product-card">
+                                <div class="product-badge">
                                     @if($product->discount_price)
-                                        <span class="current-price">${{ number_format($product->discount_price, 2) }}</span>
-                                        <span class="old-price">${{ number_format($product->price, 2) }}</span>
-                                    @else
-                                        <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                        <span class="badge-sale">-{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%</span>
                                     @endif
+                                    @if($product->is_featured)
+                                        <span class="badge-featured">Featured</span>
+                                    @endif
+                                </div>
+                                <div class="product-actions">
+                                    <a href="#" class="wishlist-btn" data-id="{{ $product->id }}">
+                                        <i class="far fa-heart"></i>
+                                    </a>
+                                    <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}" class="quick-view-btn" data-id="{{ $product->id }}">
+                                        <i class="far fa-eye"></i>
+                                    </a>
+                                </div>
+                                <div class="product-image">
+                                    @php
+                                        $imagePath = public_path('upload/product/' . $product->image);
+                                        $imageUrl = file_exists($imagePath) && !empty($product->image) ? asset('upload/product/' . $product->image) : asset('assets/images/web/placeholders/no-image.png');
+                                    @endphp
+                                    <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
+                                    <div class="hover-overlay">
+                                        <button class="add-to-cart-btn" data-id="{{ $product->id }}">
+                                            <i class="fas fa-shopping-bag me-2"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-rating">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $product->rating)
+                                                <i class="fas fa-star"></i>
+                                            @else
+                                                <i class="far fa-star"></i>
+                                            @endif
+                                        @endfor
+                                        <span>({{ $product->reviews_count }})</span>
+                                    </div>
+                                    <h4 class="product-title">
+                                        <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}">{{ $product->name }}</a>
+                                    </h4>
+                                    <div class="product-price">
+                                        @if($product->discount_price)
+                                            <span class="current-price">${{ number_format($product->discount_price, 2) }}</span>
+                                            <span class="old-price">${{ number_format($product->price, 2) }}</span>
+                                        @else
+                                            <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="row justify-content-center g-3" data-aos="fade-up">
+                    <div class="col-12">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <div class="text-center d-flex flex-column justify-content-center">
+                                <h4 class="mb-1">No Featured Products Available</h4>
+                                <span class="fs-16px mb-0 text-muted">Please check back later for updates</span>
+                            </div>
+                        </div>
                     </div>
-                @endforeach
-            </div>
-
+                </div>
+            @endif
             <div class="text-center mt-5" data-aos="fade-up">
                 <a href="{{ route('shop') }}" class="btn btn-outline-primary btn-lg">View All Products</a>
             </div>
@@ -233,13 +200,13 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class="testimonials-section">
-        <div class="container">
-            <div class="section-header text-center" data-aos="fade-up">
-                <span class="section-subtitle">Testimonials</span>
-                <h2 class="section-title">What Our Customers Say</h2>
-                <p class="section-text">Join thousands of satisfied customers worldwide</p>
-            </div>
+{{--    <section class="testimonials-section">--}}
+{{--        <div class="container">--}}
+{{--            <div class="section-header text-center" data-aos="fade-up">--}}
+{{--                <span class="section-subtitle">Testimonials</span>--}}
+{{--                <h2 class="section-title">What Our Customers Say</h2>--}}
+{{--                <p class="section-text">Join thousands of satisfied customers worldwide</p>--}}
+{{--            </div>--}}
 
 {{--            <div class="testimonials-slider" data-aos="fade-up">--}}
 {{--                <div class="swiper-wrapper">--}}
@@ -256,7 +223,7 @@
 {{--                                </div>--}}
 {{--                                <p class="testimonial-text">{{ $testimonial->comment }}</p>--}}
 {{--                                <div class="testimonial-author">--}}
-{{--                                    <img src="{{ asset('storage/testimonials/' . $testimonial->image) }}" alt="{{ $testimonial->name }}">--}}
+{{--                                    <img src="{{ asset('upload/web/' . $testimonial->image) }}" alt="{{ $testimonial->name }}">--}}
 {{--                                    <div>--}}
 {{--                                        <h5>{{ $testimonial->name }}</h5>--}}
 {{--                                        <span>{{ $testimonial->position }}</span>--}}
@@ -268,43 +235,22 @@
 {{--                </div>--}}
 {{--                <div class="swiper-pagination"></div>--}}
 {{--            </div>--}}
-        </div>
-    </section>
+{{--        </div>--}}
+{{--    </section>--}}
 
     <!-- Brands Section -->
     <section class="brands-section">
         <div class="container">
             <div class="row g-4 align-items-center">
-                <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="brand-logo">
-                        <img src="{{ asset('frontend/images/brands/nike.png') }}" alt="Nike">
+                @foreach($brand as $brands)
+                    <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="brand-logo">
+{{--                            <img src="{{ asset('frontend/images/brands/nike.png') }}" alt="Nike">--}}
+                            <h4>{{$brands['name']}}</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="150">
-                    <div class="brand-logo">
-                        <img src="{{ asset('frontend/images/brands/adidas.png') }}" alt="Adidas">
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="brand-logo">
-                        <img src="{{ asset('frontend/images/brands/apple.png') }}" alt="Apple">
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="250">
-                    <div class="brand-logo">
-                        <img src="{{ asset('frontend/images/brands/samsung.png') }}" alt="Samsung">
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="brand-logo">
-                        <img src="{{ asset('frontend/images/brands/sony.png') }}" alt="Sony">
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="350">
-                    <div class="brand-logo">
-                        <img src="{{ asset('frontend/images/brands/lg.png') }}" alt="LG">
-                    </div>
-                </div>
+                @endforeach
+
             </div>
         </div>
     </section>

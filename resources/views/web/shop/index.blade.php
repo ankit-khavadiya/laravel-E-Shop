@@ -47,19 +47,20 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="filter-widget">
                             <h4>Brands</h4>
-{{--                            <ul class="filter-list">--}}
-{{--                                @foreach($brands as $brand)--}}
-{{--                                    <li>--}}
-{{--                                        <label class="checkbox-label">--}}
-{{--                                            <input type="checkbox" value="{{ $brand->id }}" class="brand-filter">--}}
-{{--                                            <span>{{ $brand->name }}</span>--}}
-{{--                                        </label>--}}
-{{--                                    </li>--}}
-{{--                                @endforeach--}}
-{{--                            </ul>--}}
+                            <ul class="filter-list">
+                                @foreach($categories as $category)
+                                    @if($category['parent_id'] === 1)
+                                        <li>
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" value="{{ $category->id }}" class="brand-filter">
+                                                <span>{{ $category->name }}</span>
+                                            </label>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
                         </div>
 
                         <div class="filter-widget">

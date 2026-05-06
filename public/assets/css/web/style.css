@@ -1055,6 +1055,10 @@ body {
     width: 200px;
 }
 
+#priceRange{
+    width:100%;
+}
+
 @media (max-width: 768px) {
     .filter-sidebar {
         margin-bottom: 30px;

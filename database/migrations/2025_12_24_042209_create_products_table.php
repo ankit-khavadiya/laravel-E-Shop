@@ -30,7 +30,7 @@ return new class extends Migration
             $table->text('meta_keywords')->nullable();
             $table->decimal('rating', 2, 1)->nullable();
             $table->unsignedInteger('reviews_count')->default(0);
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnDelete();
             $table->timestamps();
         });
     }

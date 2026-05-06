@@ -12,8 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+// Admin dashboard routes
 Route::prefix('admin')->group(function () {
 
+    // Admin login routes
     Route::middleware(['guest:admin'])->group(function () {
         Route::controller(AuthenticateController::class)->group(function () {
             Route::get('login','login')->name('admin.login');
@@ -23,6 +25,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth:admin'])->group(function () {
 
+        // Admin home routes
         Route::controller(HomeController::class)->group(function () {
             Route::get('/', 'index')->name('admin.home');
             Route::get('admin-profile', 'adminProfile')->name('admin-profile');
@@ -31,6 +34,7 @@ Route::prefix('admin')->group(function () {
             Route::post('admin-change-password', 'adminChangePassword')->name('admin-change-password');
         });
 
+        // Admin category tab routes
         Route::controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index')->name('categories');
             Route::post('add-category', 'addCategory')->name('add-category');
@@ -40,6 +44,7 @@ Route::prefix('admin')->group(function () {
             Route::post('delete-category', 'deleteCategory')->name('delete-category');
         });
 
+        // Admin product tab routes
         Route::controller(ProductController::class)->group(function () {
             Route::get('products', 'index')->name('products');
             Route::post('add-product', 'addProduct')->name('add-product');
@@ -49,24 +54,29 @@ Route::prefix('admin')->group(function () {
             Route::post('delete-product', 'deleteProduct')->name('delete-product');
         });
 
+        // Admin customer tab routes
         Route::controller(CustomerController::class)->group(function () {
             Route::get('customers', 'index')->name('customers');
         });
 
+        // Admin order tab routes
         Route::controller(OrderController::class)->group(function () {
             Route::get('orders', 'index')->name('orders');
         });
 
+        // Admin payment tab routes
         Route::controller(PaymentController::class)->group(function () {
             Route::get('payments', 'index')->name('payments');
         });
 
+        // Admin setting tab routes
         Route::controller(SettingController::class)->group(function () {
             Route::get('settings', 'index')->name('settings');
             Route::post('settings/update',  'update')->name('settings.update');
         });
     });
 
+    // Admin logout
     Route::get('logout', function (Request $request) {
         Auth::guard('admin')->logout();
         return redirect()->route('admin.login');

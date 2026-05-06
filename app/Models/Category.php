@@ -21,11 +21,19 @@ class Category extends Model
         'updated_at',
     ];
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+// Self relationship (parent-child)
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
-    public function products(){
-        return $this->hasMany(Product::class);
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

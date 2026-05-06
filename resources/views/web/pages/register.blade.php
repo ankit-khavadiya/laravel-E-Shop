@@ -31,7 +31,7 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Phone Number</label>
                                     <input type="tel" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" placeholder="Enter your phone number">
-                                    <label class="error" id="phone-error" for="phone" style="display: none"></label>
+                                    <label class="error text-danger" id="phone-error" for="phone" style="display: none"></label>
                                 </div>
 
                                 <div class="form-group mb-3">

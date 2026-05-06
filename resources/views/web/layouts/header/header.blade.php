@@ -56,7 +56,7 @@
                     @auth
                         <div class="dropdown user-dropdown">
                             <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
-                                <img src="{{ Auth::user()->profile_image ? asset('upload/'.Auth::user()->profile_image) : asset('assets/images/web/placeholders/user-placeholder.jpg') }}" alt="User" class="user-avatar">
+                                <img src="{{ Auth::user()->profile_image ? asset('upload/web/'.Auth::user()->profile_image) : asset('assets/images/web/placeholders/user-placeholder.jpg') }}" alt="User" class="user-avatar profile">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{route('user-profile')}}"><i class="fas fa-user me-2"></i>My Account</a></li>

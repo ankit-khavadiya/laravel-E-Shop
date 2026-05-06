@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-
+// User social login routes
 Route::middleware(['guest:web'])->group(function () {
     Route::controller(AuthenticateController::class)->group(function () {
         Route::get('login','login')->name('login');
@@ -22,29 +22,33 @@ Route::middleware(['guest:web'])->group(function () {
     });
 });
 
+// User Home route
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
 });
 
 Route::middleware(['auth:web'])->group(function () {
 
+    // User profile routes
     Route::controller(UserProfileController::class)->group(function () {
         Route::get('user-profile', 'index')->name('user-profile');
         Route::get('stats', 'getStats')->name('stats');
         Route::get('recent-orders', 'getRecentOrders')->name('recent-orders');
         Route::get('all-orders', 'getAllOrders')->name('all-orders');
         Route::post('user-profile-image', 'userProfileImage')->name('user-profile-image');
-        Route::post('profile/update', 'updateProfile')->name('profile-update');
-        Route::post('password/change', 'changePassword')->name('password-change');
+        Route::post('profile-update', 'updateProfile')->name('profile-update');
+        Route::post('user-password-change', 'changePassword')->name('user-password-change');
         Route::delete('delete', 'deleteAccount')->name('delete');
     });
 
+    // Shop module routes
     Route::controller(ShopController::class)->group(function () {
         Route::get('shop', 'index')->name('shop');
         Route::get('shop/filter', 'filter')->name('shop-filter');
         Route::get('product/{slug}', 'detail')->name('product-slug');
     });
 
+    // Cart module routes
     Route::controller(CartController::class)->group(function () {
         Route::get('cart', 'index')->name('cart');
         Route::get('cartAdd', 'add')->name('cart-add');
@@ -53,12 +57,14 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('cartCount', 'count')->name('cart-count');
     });
 
+    // Wishlist module routes
     Route::controller(WishlistController::class)->group(function () {
         Route::get('wishlist', 'index')->name('wishlist');
         Route::get('toggle', 'toggle')->name('toggle');
         Route::get('wishCount', 'count')->name('wishlist-count');
     });
 
+    // User logout
     Route::get('logout', function (Request $request) {
         Auth::guard('web')->logout();
         return redirect()->route('home');

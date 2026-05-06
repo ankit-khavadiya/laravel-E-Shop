@@ -18,4 +18,4 @@
 
 <link rel="stylesheet" href="{{asset('assets/lib/toastr/toastr.min.css')}}">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{asset('assets/lib/jquery/js/jquery-3.7.0.min.js')}}"></script>

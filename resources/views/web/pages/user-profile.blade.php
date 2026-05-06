@@ -11,10 +11,10 @@
                     <div class="col-lg-4">
                         <div class="profile-sidebar">
                             <div class="avatar-wrapper" onclick="document.getElementById('profileImageInput').click()">
-                                <img src="{{ Auth::user()->profile_image ? asset('upload/web'.Auth::user()->profile_image) : asset('assets/images/web/placeholders/user-placeholder.jpg') }}"
+                                <img src="{{ Auth::user()->profile_image ? asset('upload/web/'.Auth::user()->profile_image) : asset('assets/images/web/placeholders/user-placeholder.jpg') }}"
                                      alt="Profile Image"
                                      id="profileImage"
-                                     class="profile-img">
+                                     class="profile-img profile">
                                 <div class="avatar-overlay" onclick="document.getElementById('profileImageInput').click()">
                                     <i class="fas fa-camera"></i>
                                 </div>
@@ -31,22 +31,22 @@
 
                             <ul class="profile-menu">
                                 <li class="active" data-tab="dashboard">
-                                    <a href="#" onclick="showTab('dashboard'); return false;">
+                                    <a href="javascript:void(0)" onclick="showTab('dashboard'); return false;">
                                         <i class="fas fa-tachometer-alt"></i> Dashboard
                                     </a>
                                 </li>
                                 <li data-tab="profile">
-                                    <a href="#" onclick="showTab('profile'); return false;">
+                                    <a href="javascript:void(0)" onclick="showTab('profile'); return false;">
                                         <i class="fas fa-user"></i> My Profile
                                     </a>
                                 </li>
                                 <li data-tab="orders">
-                                    <a href="#" onclick="showTab('orders'); return false;">
+                                    <a href="javascript:void(0)" onclick="showTab('orders'); return false;">
                                         <i class="fas fa-shopping-bag"></i> My Orders
                                     </a>
                                 </li>
                                 <li data-tab="security">
-                                    <a href="#" onclick="showTab('security'); return false;">
+                                    <a href="javascript:void(0)" onclick="showTab('security'); return false;">
                                         <i class="fas fa-key"></i> Security
                                     </a>
                                 </li>
@@ -131,8 +131,6 @@
 
                                 <form id="profileForm">
                                     @csrf
-                                    @method('PUT')
-
                                     <div class="profile-card">
                                         <div class="card-header">
                                             <h4><i class="fas fa-user-circle"></i> Personal Information</h4>
@@ -140,21 +138,23 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-12 mb-3">
+                                                    <input type="hidden" name="id" value="{{ Auth::user()->id }}">
                                                     <label class="form-label">Full Name *</label>
-                                                    <input type="text" name="name" class="form-control"
-                                                           value="{{ Auth::user()->name }}" required>
+                                                    <input type="text" name="name" id="name" class="form-control" value="{{ Auth::user()->name }}" placeholder="Enter your name">
+                                                    <label id="name-error" class="error text-danger" for="name" style="display: none"></label>
                                                 </div>
 
                                                 <div class="col-md-12 mb-3">
                                                     <label class="form-label">Email Address *</label>
-                                                    <input type="email" name="email" class="form-control"
-                                                           value="{{ Auth::user()->email }}" required>
+                                                    <input type="email" name="email" id="email" class="form-control" value="{{ Auth::user()->email }}" placeholder="Enter your email">
+                                                    <label id="email-error" class="error text-danger" for="name" style="display: none"></label>
+
                                                 </div>
 
                                                 <div class="col-md-12 mb-3">
                                                     <label class="form-label">Phone Number</label>
-                                                    <input type="tel" name="phone" class="form-control"
-                                                           value="{{ Auth::user()->phone }}">
+                                                    <input type="tel" name="phone" id="phone" class="form-control" value="{{ Auth::user()->phone }}" placeholder="Enter your phone">
+                                                    <label id="phone-error" class="error text-danger" for="phone" style="display: none"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,32 +168,32 @@
                                             <div class="row">
                                                 <div class="col-12 mb-3">
                                                     <label class="form-label">Street Address</label>
-                                                    <textarea name="address" class="form-control" rows="2">{{ Auth::user()->address }}</textarea>
+                                                    <textarea type="text" name="address" id="address" class="form-control" rows="2" placeholder="Enter your address">{{ Auth::user()->address }}</textarea>
+                                                    <label id="address-error" class="error text-danger" for="address" style="display: none"></label>
                                                 </div>
 
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label">City</label>
-                                                    <input type="text" name="city" class="form-control"
-                                                           value="{{ Auth::user()->city }}">
+                                                    <input type="text" name="city" class="form-control" id="city" value="{{ Auth::user()->city }}" placeholder="Enter your city">
+                                                    <label id="city-error" class="error text-danger" for="city" style="display: none"></label>
                                                 </div>
 
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label">State</label>
-                                                    <input type="text" name="state" class="form-control"
-                                                           value="{{ Auth::user()->state }}">
+                                                    <input type="text" name="state" class="form-control" id="state" value="{{ Auth::user()->state }}" placeholder="Enter your state">
+                                                    <label id="state-error" class="error text-danger" for="state" style="display: none"></label>
                                                 </div>
 
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label">ZIP Code</label>
-                                                    <input type="text" name="zip_code" class="form-control"
-                                                           value="{{ Auth::user()->zip_code }}">
+                                                    <input type="text" name="zip_code" id="zip_code" class="form-control" value="{{ Auth::user()->zip_code }}" placeholder="Enter your Zip code">
+                                                    <label id="zip_code-error" class="error text-danger" for="zip_code" style="display: none"></label>
                                                 </div>
 
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label">Country</label>
                                                     <select name="country" class="form-select">
-                                                        <option value="">Select Country</option>
-                                                        <option value="US" {{ Auth::user()->country == 'US' ? 'selected' : '' }}>United States</option>
+                                                        <option value='' disabled selected>-- Please select a category --</option>                                                        <option value="US" {{ Auth::user()->country == 'US' ? 'selected' : '' }}>United States</option>
                                                         <option value="UK" {{ Auth::user()->country == 'UK' ? 'selected' : '' }}>United Kingdom</option>
                                                         <option value="CA" {{ Auth::user()->country == 'CA' ? 'selected' : '' }}>Canada</option>
                                                         <option value="AU" {{ Auth::user()->country == 'AU' ? 'selected' : '' }}>Australia</option>
@@ -205,12 +205,8 @@
                                     </div>
 
                                     <div class="profile-actions">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-save me-2"></i> Update Profile
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger" id="deleteAccountBtn">
-                                            <i class="fas fa-trash me-2"></i> Delete Account
-                                        </button>
+                                        <button type="submit" name="submit" id="updateBtn" class="btn btn-primary"><i class="fas fa-save me-2"></i> Update Profile</button>
+                                        <button type="button" class="btn btn-outline-danger" id="deleteAccountBtn"><i class="fas fa-trash me-2"></i> Delete Account</button>
                                     </div>
                                 </form>
                             </div>
@@ -264,17 +260,18 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Current Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" name="current_password" class="form-control" id="currentPassword" required>
+                                                    <input type="password" name="currentPassword" class="form-control" id="currentPassword">
                                                     <button class="btn btn-outline-secondary toggle-password" type="button" data-target="currentPassword">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                 </div>
+                                                <label id="currentPassword-error" class="error text-danger" for="currentPassword" style="display: none"></label>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">New Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" name="new_password" class="form-control" id="newPassword" required>
+                                                    <input type="password" name="newPassword" class="form-control" id="newPassword">
                                                     <button class="btn btn-outline-secondary toggle-password" type="button" data-target="newPassword">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
@@ -286,20 +283,21 @@
                                                     </div>
                                                     <small id="strengthText" class="text-muted">Enter a password</small>
                                                 </div>
+                                                <label id="newPassword-error" class="error text-danger" for="newPassword" style="display: none"></label>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Confirm New Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" name="new_password_confirmation" class="form-control" id="confirmPassword" required>
+                                                    <input type="password" name="confirmPassword" class="form-control" id="confirmPassword">
                                                     <button class="btn btn-outline-secondary toggle-password" type="button" data-target="confirmPassword">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                 </div>
-                                                <div id="passwordMatchMsg" class="mt-2"></div>
+                                                <label id="confirmPassword-error" class="error text-danger" for="confirmPassword" style="display: none"></label>
                                             </div>
 
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" name="submit" class="btn btn-primary">
                                                 <i class="fas fa-save me-2"></i> Update Password
                                             </button>
                                         </form>
@@ -489,7 +487,7 @@
                         success: function (res) {
                             const imageUrl = "{{ asset('upload') }}/web/" + res.data;
 
-                            $('.profile-img').attr('src', imageUrl + '?t=' + new Date().getTime()); // cache busting
+                            $('.profile').attr('src', imageUrl + '?t=' + new Date().getTime()); // cache busting
 
                             toastr.success(res.message);
                             $('#userProfileImage-error').hide();
@@ -507,43 +505,44 @@
             });
 
             // Profile Form Submission
-            $('#profileForm').submit(function(e) {
-                e.preventDefault();
-
-                const formData = $(this).serialize();
-                const submitBtn = $(this).find('button[type="submit"]');
-
-                submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i> Saving...');
-                submitBtn.prop('disabled', true);
-
-                $.ajax({
-                    url: "{{ route('profile-update') }}",
-                    type: "POST",
-                    data: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: 'Profile updated successfully',
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-                            $('#userName').text(response.data.name);
+            $('#profileForm').validate({
+                rules: {
+                    image: { required: true },
+                },
+                submitHandler: function (form) {
+                    var formData = new FormData(form)
+                    $.ajax({
+                        url: "{{ route('profile-update') }}",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        beforeSend:function (){
+                            $('#updateBtn').html('<i class="fas fa-spinner fa-spin me-2"></i> Saving...');
+                            $('#updateBtn').attr('disabled', true);
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: 'Profile updated successfully',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                                $('#userName').text(response.data.name);
+                            }
+                        },
+                        error: function (xhr) {
+                            let message = xhr.responseJSON?.message || 'Failed to update profile';
+                            Swal.fire('Error!', message, 'error');
+                        },
+                        complete: function () {
+                            $('#updateBtn').html('<i class="fas fa-save me-2"></i> Update Profile');
+                            $('#updateBtn').attr('disabled', false);
                         }
-                    },
-                    error: function(xhr) {
-                        let message = xhr.responseJSON?.message || 'Failed to update profile';
-                        Swal.fire('Error!', message, 'error');
-                    },
-                    complete: function() {
-                        submitBtn.html('<i class="fas fa-save me-2"></i> Update Profile');
-                        submitBtn.prop('disabled', false);
-                    }
-                });
+                    })
+                }
             });
 
             // Password Strength Checker
@@ -584,9 +583,9 @@
 
                 if (confirm.length > 0) {
                     if (password === confirm) {
-                        $('#passwordMatchMsg').html('<small class="text-success"><i class="fas fa-check-circle"></i> Passwords match</small>');
+                        $('#confirmPassword-error').html('<small class="text-success"><i class="fas fa-check-circle"></i> Passwords match</small>');
                     } else {
-                        $('#passwordMatchMsg').html('<small class="text-danger"><i class="fas fa-times-circle"></i> Passwords do not match</small>');
+                        $('#confirmPassword-error').html('<small class="text-danger"><i class="fas fa-times-circle"></i> Passwords do not match</small>');
                     }
                 } else {
                     $('#passwordMatchMsg').html('');
@@ -605,39 +604,67 @@
             });
 
             // Change Password Form Submission
-            $('#changePasswordForm').submit(function(e) {
-                e.preventDefault();
-
-                const formData = $(this).serialize();
-                const submitBtn = $(this).find('button[type="submit"]');
-
-                submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i> Updating...');
-                submitBtn.prop('disabled', true);
-
-                $.ajax({
-                    url: "{{ route('password-change') }}",
-                    type: "POST",
-                    data: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            $('#changePasswordForm').validate({
+                rules: {
+                    currentPassword: {required: true},
+                    newPassword: {required: true},
+                    confirmPassword: {required: true}
+                },
+                messages: {
+                    currentPassword: {
+                        required: "please enter currentPassword",
                     },
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire('Success!', 'Password changed successfully', 'success');
-                            $('#changePasswordForm')[0].reset();
-                            $('#strengthBar').css('width', '0%');
-                            $('#passwordMatchMsg').html('');
-                        }
+                    newPassword: {
+                        required: "please enter newPassword",
                     },
-                    error: function(xhr) {
-                        let message = xhr.responseJSON?.message || 'Failed to change password';
-                        Swal.fire('Error!', message, 'error');
-                    },
-                    complete: function() {
-                        submitBtn.html('<i class="fas fa-save me-2"></i> Update Password');
-                        submitBtn.prop('disabled', false);
+                    confirmPassword: {
+                        required: "please enter confirmPassword"
                     }
-                });
+                },
+                submitHandler: function (form, e) {
+                    e.preventDefault();
+                    var formData = new FormData(form);
+                    $.ajax({
+                        url: "{{route('user-password-change')}}",
+                        method: "POST",
+                        dataType: "JSON",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function () {
+                            $('#changePasswordBtn').html('<i class="fas fa-spinner fa-spin me-2"></i> Updating...');
+                            $('#changePasswordBtn').attr('disabled', true);
+                        },
+                        success: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: 'Password changed successfully',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            $('#changePasswordForm')[0].reset();
+                        },
+                        error: function (xhr) {
+                            let res = xhr.responseJSON;
+                            console.log(res);
+                            if (res?.error) {
+                                if (res.error.currentPassword) {
+                                    $('#currentPassword-error').html(res.error.currentPassword[0]).show();
+                                }
+                                if (res.error.newPassword) {
+                                    $('#newPassword-error').html(res.error.newPassword[0]).show();
+                                }
+                            } else if (res?.message) {
+                                toastr.error(res.message);
+                            }
+                        },
+                        complete: function () {
+                            $('#changePasswordBtn').html('<i class="fas fa-save me-2"></i> Update Password');
+                            $('#changePasswordBtn').attr('disabled', false);
+                        }
+                    });
+                }
             });
 
             // Delete Account
@@ -651,11 +678,15 @@
             });
 
             $('#confirmDeleteBtn').click(function() {
+                const userId = {{ Auth::user()->id }}
                 $.ajax({
-                    url: "{{ route('delete') }}",
-                    type: "DELETE",
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    url: "{{route('user-password-change')}}",
+                    method: "POST",
+                    dataType: "JSON",
+                    data: { id: userId },
+                    beforeSend: function () {
+                        $('#confirmDeleteBtn').html('<i class="fas fa-spinner fa-spin me-2"></i> Deleteing...');
+                        $('#confirmDeleteBtn').attr('disabled', true);
                     },
                     success: function(response) {
                         if (response.success) {
@@ -672,6 +703,10 @@
                     },
                     error: function() {
                         Swal.fire('Error!', 'Failed to delete account', 'error');
+                    },
+                    complete: function () {
+                        $('#confirmDeleteBtn').html('Delete Account');
+                        $('#confirmDeleteBtn').attr('disabled', false);
                     }
                 });
             });

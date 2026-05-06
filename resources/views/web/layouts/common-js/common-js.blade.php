@@ -116,12 +116,14 @@
         });
     });
 
+
     const fbProvider = new FacebookAuthProvider();
 
     fbProvider.setCustomParameters({
         display: 'popup'
     });
 
+    // Function to handle Facebook Sign-in
     $('#loginWithFacebookBtn').click(function () {
 
         let isLoginPage = "{{ request()->segment(1) == 'login'}}";

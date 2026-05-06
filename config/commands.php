@@ -221,3 +221,16 @@
 
 // install package :- composer require kreait/laravel-firebase
 
+// Note :-
+// open Firebase and create new project as you project name then go to settings->general then copy pest script as you need
+// Then goto settings->service account and Generate new private key,that json file use it
+// Then goto Security->Authentication->sing-in method then add google provider, here you will add all social platforms for social login
+
+
+
+/* --- Implement Facebook login --- */
+
+// Note :-
+// same process as google login for firebase, if you have implement both login google and facebook then json or other firebase script use once
+// Also need create app key and secret key by https://developers.facebook.com/
+

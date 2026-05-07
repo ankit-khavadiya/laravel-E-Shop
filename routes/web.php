@@ -27,6 +27,13 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
 });
 
+// Shop module routes
+Route::controller(ShopController::class)->group(function () {
+    Route::get('shop', 'index')->name('shop');
+    Route::post('shop/filter', 'filter')->name('shop-filter');
+    Route::get('product/{slug}', 'detail')->name('product-slug');
+});
+
 Route::middleware(['auth:web'])->group(function () {
 
     // User profile routes
@@ -41,17 +48,10 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('delete', 'deleteAccount')->name('delete');
     });
 
-    // Shop module routes
-    Route::controller(ShopController::class)->group(function () {
-        Route::get('shop', 'index')->name('shop');
-        Route::get('shop/filter', 'filter')->name('shop-filter');
-        Route::get('product/{slug}', 'detail')->name('product-slug');
-    });
-
     // Cart module routes
     Route::controller(CartController::class)->group(function () {
         Route::get('cart', 'index')->name('cart');
-        Route::get('cartAdd', 'add')->name('cart-add');
+        Route::post('cartAdd', 'add')->name('cart-add');
         Route::get('cartUpdate', 'update')->name('cart-update');
         Route::get('cartDelete', 'delete')->name('cart-delete');
         Route::get('cartCount', 'count')->name('cart-count');
@@ -60,7 +60,8 @@ Route::middleware(['auth:web'])->group(function () {
     // Wishlist module routes
     Route::controller(WishlistController::class)->group(function () {
         Route::get('wishlist', 'index')->name('wishlist');
-        Route::get('toggle', 'toggle')->name('toggle');
+        Route::post('toggle', 'toggle')->name('toggle');
+        Route::get('wishlist-remove', 'remove')->name('wishlist-remove');
         Route::get('wishCount', 'count')->name('wishlist-count');
     });
 

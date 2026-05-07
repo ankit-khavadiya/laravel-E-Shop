@@ -40,19 +40,74 @@
     // Cart count update
     function updateCartCount() {
         $.get("{{ route('cart-count') }}", function(data) {
-            $('#cartCount').text(data.count);
+            $('#cartCount').text(data.data.count);
         });
     }
+    updateCartCount()
 
     // Wishlist count update
     function updateWishlistCount() {
         $.get("{{ route('wishlist-count') }}", function(data) {
-            $('#wishlistCount').text(data.count);
+            $('#wishlistCount').text(data.data.count);
         });
     }
+    updateWishlistCount();
 
-    setInterval(updateCartCount, 30000);
-    setInterval(updateWishlistCount, 30000);
+    // Add to Cart
+    $('.add-to-cart-btn').click(function(e) {
+        e.preventDefault();
+        let productId = $(this).data('id');
+
+        $.ajax({
+            url: "{{ route('cart-add') }}",
+            type: "POST",
+            data: {
+                product_id: productId,
+                quantity: 1,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Added to Cart!',
+                    text: 'Product added successfully',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                updateCartCount();
+            },
+            error: function() {
+                Swal.fire('Error!', 'Failed to add product', 'error');
+            }
+        });
+    });
+
+    // Add to Wishlist
+    $('.wishlist-btn').click(function(e) {
+        e.preventDefault();
+        let productId = $(this).data('id');
+        let icon = $(this).find('i');
+
+        $.ajax({
+            url: "{{ route('toggle') }}",
+            type: "POST",
+            data: {
+                product_id: productId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                console.log(response)
+                if (response.data.added) {
+                    icon.removeClass('far').addClass('fas');
+                    Swal.fire('Added!', 'Added to wishlist', 'success');
+                } else {
+                    icon.removeClass('fas').addClass('far');
+                    Swal.fire('Removed!', 'Removed from wishlist', 'info');
+                }
+                updateWishlistCount();
+            }
+        });
+    });
 </script>
 <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";

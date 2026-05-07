@@ -41,7 +41,7 @@
                         <div class="filter-widget">
                             <h4>Price Range</h4>
                             <div class="price-range">
-                                <input type="range" id="priceRange" min="0" max="1000" step="10">
+                                <input type="range" id="priceRange" min="0" max="10000" step="3">
                                 <div class="price-values">
                                     <span>$<span id="minPrice">0</span></span>
                                     <span>-</span>
@@ -82,7 +82,6 @@
                                 </li>
                             </ul>
                         </div>
-
                         <button class="btn btn-primary w-100" id="clearFilters">Clear All Filters</button>
                     </div>
                 </div>
@@ -106,61 +105,7 @@
                     </div>
 
                     <div class="row g-4" id="productsGrid">
-                        @foreach($products as $product)
-                            <div class="col-lg-4 col-md-6">
-                                <div class="product-card">
-                                    <div class="product-badge">
-                                        @if($product->discount_price)
-                                            <span class="badge-sale">-{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%</span>
-                                        @endif
-                                    </div>
-                                    <div class="product-actions">
-                                        <a href="#" class="wishlist-btn" data-id="{{ $product->id }}">
-                                            <i class="far fa-heart"></i>
-                                        </a>
-                                        <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}" class="quick-view-btn" data-id="{{ $product->id }}">
-                                            <i class="far fa-eye"></i>
-                                        </a>
-                                    </div>
-                                    <div class="product-image">
-                                        @php
-                                            $imagePath = public_path('upload/product/' . $product->image);
-                                            $imageUrl = file_exists($imagePath) && !empty($product->image)
-                                                ? asset('upload/product/' . $product->image)
-                                                : asset('assets/images/web/placeholders/no-image.png');
-                                        @endphp
-                                        <img src="{{ $imageUrl }}" alt="{{ $product->name }}">
-                                        <div class="hover-overlay">
-                                            <button class="add-to-cart-btn" data-id="{{ $product->id }}">
-                                                <i class="fas fa-shopping-bag"></i> Quick Add
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="product-info">
-                                        <div class="product-rating">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $product->rating)
-                                                    <i class="fas fa-star"></i>
-                                                @else
-                                                    <i class="far fa-star"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
-                                        <h4 class="product-title">
-                                            <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}">{{ $product->name }}</a>
-                                        </h4>
-                                        <div class="product-price">
-                                            @if($product->discount_price)
-                                                <span class="current-price">${{ number_format($product->discount_price, 2) }}</span>
-                                                <span class="old-price">${{ number_format($product->price, 2) }}</span>
-                                            @else
-                                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+                        @include('web.shop.product-grid-component')
                     </div>
 
                     <div class="pagination-wrapper mt-5">
@@ -172,9 +117,8 @@
     </div>
 @endsection
 
-@section('scripts')
+@section('webJs')
     <script>
-        // Filter functionality
         let filters = {
             categories: [],
             brands: [],
@@ -184,23 +128,41 @@
             sort: 'latest'
         };
 
+        /*
+        |--------------------------------------------------------------------------
+        | APPLY FILTER
+        |--------------------------------------------------------------------------
+        */
         function applyFilters() {
+            $('#productsGrid').html(`
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary"></div>
+            </div>
+            `);
+
             $.ajax({
                 url: "{{ route('shop-filter') }}",
                 type: "POST",
                 data: {
                     filters: filters,
-                    _token: '{{ csrf_token() }}'
+                    _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    $('#productsGrid').html(response.data.html);
-                    $('#showingCount').text(response.data.count);
+                    console.log(response)
+                    if (response.status) {
+                        $('#productsGrid').html(response.data.html);
+                        $('#showingCount').text(response.data.count);
+                    }
                 }
             });
         }
 
-        // Category filter
-        $('.category-filter').change(function() {
+        /*
+        |--------------------------------------------------------------------------
+        | CATEGORY FILTER
+        |--------------------------------------------------------------------------
+        */
+        $('.category-filter').change(function () {
             let value = $(this).val();
             if ($(this).is(':checked')) {
                 filters.categories.push(value);
@@ -210,8 +172,12 @@
             applyFilters();
         });
 
-        // Brand filter
-        $('.brand-filter').change(function() {
+        /*
+        |--------------------------------------------------------------------------
+        | BRAND FILTER
+        |--------------------------------------------------------------------------
+        */
+        $('.brand-filter').change(function () {
             let value = $(this).val();
             if ($(this).is(':checked')) {
                 filters.brands.push(value);
@@ -221,21 +187,12 @@
             applyFilters();
         });
 
-        // Price range
-        $('#priceRange').on('input', function() {
-            let max = $(this).val();
-            $('#maxPrice').text(max);
-            filters.maxPrice = max;
-            applyFilters();
-        });
-
-        // Sort by
-        $('#sortBy').change(function() {
-            filters.sort = $(this).val();
-            applyFilters();
-        });
-
-        $('.rating-filter').change(function() {
+        /*
+        |--------------------------------------------------------------------------
+        | RATING FILTER
+        |--------------------------------------------------------------------------
+        */
+        $('.rating-filter').change(function () {
             let value = $(this).val();
 
             if ($(this).is(':checked')) {
@@ -243,13 +200,40 @@
             } else {
                 filters.ratings = filters.ratings.filter(v => v != value);
             }
-
             applyFilters();
         });
 
-        // Clear filters
-        $('#clearFilters').click(function() {
-            $('.category-filter, .brand-filter, .rating-filter').prop('checked', false);
+        /*
+        |--------------------------------------------------------------------------
+        | PRICE FILTER
+        |--------------------------------------------------------------------------
+        */
+        $('#priceRange').on('input', function () {
+            let max = $(this).val();
+            $('#maxPrice').text(max);
+            filters.maxPrice = max;
+            applyFilters();
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | SORTING
+        |--------------------------------------------------------------------------
+        */
+        $('#sortBy').change(function () {
+            filters.sort = $(this).val();
+            applyFilters();
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | CLEAR FILTER
+        |--------------------------------------------------------------------------
+        */
+        $('#clearFilters').click(function () {
+            $('.category-filter').prop('checked', false);
+            $('.brand-filter').prop('checked', false);
+            $('.rating-filter').prop('checked', false);
             filters = {
                 categories: [],
                 brands: [],
@@ -258,8 +242,8 @@
                 maxPrice: 1000,
                 sort: 'latest'
             };
-            $('#priceRange').val(1000);
-            $('#maxPrice').text(1000);
+            $('#priceRange').val(10000);
+            $('#maxPrice').text(10000);
             applyFilters();
         });
     </script>

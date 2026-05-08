@@ -10,7 +10,11 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index(){
-        $featuredProducts = Product::where('is_featured', 1)->take(4)->get();
+        $featuredProducts = Product::where('is_featured', 1)->with([
+            'wishlist' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])->take(4)->get();
+//        return $featuredProducts;
         $popularCategories = Category::where('parent_id', 0)
             ->withCount('products')
             ->with(['children' => function ($q) {

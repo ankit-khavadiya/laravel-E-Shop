@@ -90,7 +90,7 @@
                                         <div class="stats-icon">
                                             <i class="fas fa-heart"></i>
                                         </div>
-                                        <h3 id="wishlistCount">0</h3>
+                                        <h3 id="userWishlistCount">0</h3>
                                         <p>Wishlist Items</p>
                                     </div>
                                 </div>
@@ -221,7 +221,7 @@
                                 <div class="profile-card">
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table">
+                                            <table id="allOrdersTable" class="table">
                                                 <thead>
                                                 <tr>
                                                     <th>Order ID</th>
@@ -232,7 +232,7 @@
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
-                                                <tbody id="allOrdersTable">
+                                                <tbody id="allOrdersTableBody">
                                                 <tr>
                                                     <td colspan="6" class="text-center">Loading orders...</td>
                                                 </tr>
@@ -407,7 +407,6 @@
                     success: function(response) {
                         $('#totalOrders').text(response.total_orders);
                         $('#totalSpent').text('$' + response.total_spent);
-                        $('#wishlistCount').text(response.wishlist_count);
                     }
                 });
             }
@@ -441,29 +440,22 @@
 
             // Load all orders
             function loadAllOrders() {
-                $.ajax({
-                    url: "{{ route('all-orders') }}",
-                    type: "GET",
-                    success: function(response) {
-                        let html = '';
-                        if (!response.orders) {
-                            html = '<tr><td colspan="6" class="text-center">No orders found</td></tr>';
-                        } else {
-                            response.orders.forEach(order => {
-                                html += `
-                            <tr>
-                                <td>#${order.order_number}</td>
-                                <td>${order.date}</td>
-                                <td>${order.items_count}</td>
-                                <td>$${order.total_amount}</td>
-                                <td><span class="badge ${order.order_status === 'delivered' ? 'badge-success' : 'badge-warning'}">${order.order_status}</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary" onclick="viewOrder(${order.id})">View Details</button></td>
-                            </tr>
-                        `;
-                            });
-                        }
-                        $('#allOrdersTable').html(html);
-                    }
+
+                $('#allOrdersTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    destroy: true,
+
+                    ajax: "{{ route('all-orders') }}",
+
+                    columns: [
+                        { data: 'order_number', name: 'order_number' },
+                        { data: 'created_at', name: 'created_at' },
+                        { data: 'items', name: 'items' },
+                        { data: 'total', name: 'total' },
+                        { data: 'status', name: 'status', orderable: false, searchable: false },
+                        { data: 'action', name: 'action', orderable: false, searchable: false },
+                    ]
                 });
             }
 
@@ -507,7 +499,8 @@
             // Profile Form Submission
             $('#profileForm').validate({
                 rules: {
-                    image: { required: true },
+                    name: { required: true },
+                    email: { required: true,email: true}
                 },
                 submitHandler: function (form) {
                     var formData = new FormData(form)
@@ -714,12 +707,7 @@
 
         // View order details
         function viewOrder(orderId) {
-            Swal.fire({
-                title: 'Order Details',
-                text: 'Order #' + orderId,
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });
+            window.location.href = "{{ url('order-details') }}/" + orderId;
         }
     </script>
 @endsection

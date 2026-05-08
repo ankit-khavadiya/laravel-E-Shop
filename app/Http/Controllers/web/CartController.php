@@ -33,13 +33,7 @@ class CartController extends Controller
         $tax = $subtotal * 0.10;
         $total = $subtotal + $shipping + $tax;
 
-        return view('web.cart.index', compact(
-            'cartItems',
-            'subtotal',
-            'shipping',
-            'tax',
-            'total'
-        ));
+        return view('web.cart.index', compact('cartItems', 'subtotal', 'shipping', 'tax', 'total'));
     }
 
     /*
@@ -97,12 +91,10 @@ class CartController extends Controller
                 ]);
             }
 
-            return $this->sendResponse('Product added to cart!', [
-                'cart_count' => $this->getCartCount()
-            ]);
+            return $this->sendResponse('Product added to cart!', ['cart_count' => $this->getCartCount()]);
 
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage());
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -154,14 +146,11 @@ class CartController extends Controller
                 'shipping' => number_format($shipping, 2),
                 'tax' => number_format($tax, 2),
                 'total' => number_format($total, 2),
-                'item_total' => number_format(
-                    ($product->discount_price ?? $product->price) * $request->quantity,
-                    2
-                )
+                'item_total' => number_format(($product->discount_price ?? $product->price) * $request->quantity, 2)
             ]);
 
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage());
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -210,8 +199,8 @@ class CartController extends Controller
                 'is_empty' => $cartItems->isEmpty()
             ]);
 
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage());
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -222,9 +211,7 @@ class CartController extends Controller
     */
     public function count()
     {
-        return $this->sendResponse('Cart count', [
-            'count' => $this->getCartCount()
-        ]);
+        return $this->sendResponse('Cart count', ['count' => $this->getCartCount()]);
     }
 
     /*
@@ -262,5 +249,58 @@ class CartController extends Controller
             ($userId && $cart->user_id == $userId) ||
             (!$userId && $cart->session_id == $sessionId)
         );
+    }
+
+    /**
+     * Get cart summary for checkout
+     */
+    public function getCartSummary()
+    {
+        try {
+            $userId = Auth::check() ? Auth::id() : null;
+            $sessionId = !$userId ? Session::getId() : null;
+
+            $cartItems = Cart::with('product')
+                ->when($userId, function($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })->when(!$userId, function($query) use ($sessionId) {
+                    $query->where('session_id', $sessionId);
+                })->get();
+
+            $items = [];
+            $subtotal = 0;
+
+            foreach ($cartItems as $item) {
+                $price = $item->product->discount_price ?? $item->product->price;
+                $total = $price * $item->quantity;
+                $subtotal += $total;
+
+                $items[] = [
+                    'id' => $item->id,
+                    'product_id' => $item->product_id,
+                    'name' => $item->product->name,
+                    'image' => $item->product->image,
+                    'price' => $price,
+                    'quantity' => $item->quantity,
+                    'total' => $total
+                ];
+            }
+
+            $shipping = $subtotal > 50 ? 0 : 5.00;
+            $tax = $subtotal * 0.10;
+            $total = $subtotal + $shipping + $tax;
+
+            return $this->sendResponse('Cart summary', [
+                'items' => $items,
+                'subtotal' => $subtotal,
+                'shipping' => $shipping,
+                'tax' => $tax,
+                'total' => $total,
+                'item_count' => count($items)
+            ]);
+
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
+        }
     }
 }

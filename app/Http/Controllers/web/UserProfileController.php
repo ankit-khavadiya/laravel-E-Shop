@@ -4,11 +4,14 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ResponseTrait;
+use App\Models\Order;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserProfileController extends Controller
 {
@@ -18,17 +21,100 @@ class UserProfileController extends Controller
         return view('web.pages.user-profile');
     }
 
-    public function getStats(){
+    /**
+     * Dashboard Stats
+     */
+    public function getStats()
+    {
+        try {
+            $user = Auth::user();
+            $totalOrders = Order::where('user_id', $user->id)->count();
+            $totalSpent = Order::where('user_id', $user->id)
+                ->where('payment_status', '!=', 'cancelled')
+                ->sum('total');
+            $wishlistCount = Wishlist::where('user_id', $user->id)->count();
+            return response()->json(['total_orders'  => $totalOrders, 'total_spent'   => number_format($totalSpent, 2), 'wishlist_count'=> $wishlistCount,]);
 
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
+        }
     }
 
-    public function getRecentOrders(){
+    /**
+     * Recent Orders
+     */
+    public function getRecentOrders()
+    {
+        try {
+            $orders = Order::where('user_id', Auth::id())
+                ->latest()
+                ->take(5)
+                ->get()
+                ->map(function ($order) {
+                    return [
+                        'id'            => $order->id,
+                        'order_number'  => $order->order_number,
+                        'date'          => $order->created_at->format('d M Y'),
+                        'total_amount'  => number_format($order->total, 2),
+                        'order_status'  => ucfirst($order->status),
+                    ];
+                });
 
+            return response()->json(['orders' => $orders]);
+
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
+        }
     }
 
+    /**
+     * All Orders - Yajra Datatable
+     */
     public function getAllOrders()
     {
+        try {
+            $orders = Order::withCount('items')->where('user_id', Auth::id())->latest();
 
+            return DataTables::of($orders)
+                ->addIndexColumn()
+                ->editColumn('order_number', function ($row) {
+                    return '#' . $row->order_number;
+                })
+                ->editColumn('created_at', function ($row) {
+                    return $row->created_at->format('d M Y');
+                })
+                ->addColumn('items', function ($row) {
+                    return $row->items_count;
+                })
+                ->editColumn('total', function ($row) {
+                    return '$' . number_format($row->total, 2);
+                })
+                ->addColumn('status', function ($row) {
+                    $class = match($row->status) {
+                        'pending' => 'warning',
+                        'processing' => 'info',
+                        'completed' => 'success',
+                        'delivered' => 'success',
+                        'cancelled' => 'danger',
+                        default => 'secondary'
+                    };
+
+                    return "<span class='badge bg-{$class}'>" . ucfirst($row->status) . "</span>";
+                })
+
+                ->addColumn('action', function ($row) {
+                    return "
+                        <a href='".route('order-details', $row->id)."' class='btn btn-sm btn-outline-primary'>
+                            <i class='fas fa-eye'></i> View
+                        </a>
+                    ";
+                })
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+
+        } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
+        }
     }
 
     // Update user profile image

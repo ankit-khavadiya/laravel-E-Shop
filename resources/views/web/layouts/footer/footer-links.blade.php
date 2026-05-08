@@ -5,3 +5,4 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset('assets/lib/jquery-validation/jquery.validate.js')}}{{ASSET_VERSION}}"></script>
 <script src="{{asset('assets/lib/toastr/toastr.min.js')}}{{ASSET_VERSION}}"></script>
+<script src="{{asset('assets/lib/DataTables/datatables.min.js')}}"></script>

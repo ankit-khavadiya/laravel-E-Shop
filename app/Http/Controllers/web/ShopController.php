@@ -14,7 +14,10 @@ class ShopController extends Controller
     use ResponseTrait;
 
     public function index(){
-        $products = Product::all();
+        $products = Product::with([
+            'wishlist' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])->get();
         $categories = Category::all();
         return view('web.shop.index', compact('products', 'categories'));
     }
@@ -115,11 +118,8 @@ class ShopController extends Controller
             return $this->sendResponse('Filter',['html' => $html, 'count' => $products->count()]);
 
         } catch (\Exception $exception) {
+            return $this->sendException($exception->getMessage());
 
-            return response()->json([
-                'status' => false,
-                'message' => $exception->getMessage()
-            ]);
         }
     }
 

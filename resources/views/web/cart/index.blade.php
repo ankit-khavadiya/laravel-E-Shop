@@ -98,9 +98,11 @@
                             <strong id="total">${{ number_format($total, 2) }}</strong>
                         </div>
 
-                        <button class="btn-checkout" onclick="proceedToCheckout()">
-                            <i class="fas fa-lock me-2"></i> Proceed to Checkout
-                        </button>
+                        <a href="{{ route('checkout') }}" >
+                            <button class="btn-checkout">
+                                <i class="fas fa-lock me-2"></i> Proceed to Checkout
+                            </button>
+                        </a>
 
                         <div class="text-center mt-3">
                             <a href="{{ route('shop') }}" class="text-muted">

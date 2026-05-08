@@ -8,7 +8,7 @@
             </div>
             <div class="product-actions">
                 <a href="#" class="wishlist-btn" data-id="{{ $product->id }}">
-                    <i class="far fa-heart"></i>
+                    <i class="{{ $product->wishlist->count() > 0 ? 'fas' : 'far' }} fa-heart"></i>
                 </a>
                 <a href="{{ route('product-slug', ['slug' => base64_encode($product->id)]) }}" class="quick-view-btn" data-id="{{ $product->id }}">
                     <i class="far fa-eye"></i>

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\web\AuthenticateController;
 use App\Http\Controllers\web\CartController;
+use App\Http\Controllers\web\CheckoutController;
 use App\Http\Controllers\web\HomeController;
+use App\Http\Controllers\web\OrderController;
 use App\Http\Controllers\web\ShopController;
 use App\Http\Controllers\web\UserProfileController;
 use App\Http\Controllers\web\WishlistController;
@@ -55,6 +57,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('cartUpdate', 'update')->name('cart-update');
         Route::get('cartDelete', 'delete')->name('cart-delete');
         Route::get('cartCount', 'count')->name('cart-count');
+        Route::get('cart-summary', 'getCartSummary')->name('cart-summary');
     });
 
     // Wishlist module routes
@@ -63,6 +66,21 @@ Route::middleware(['auth:web'])->group(function () {
         Route::post('toggle', 'toggle')->name('toggle');
         Route::get('wishlist-remove', 'remove')->name('wishlist-remove');
         Route::get('wishCount', 'count')->name('wishlist-count');
+    });
+
+    // Add this to your web.php routes file
+    Route::controller(CheckoutController::class)->group(function () {
+        Route::get('checkout', 'index')->name('checkout');
+        Route::post('checkout-process', 'processOrder')->name('checkout-process');
+        Route::get('order-confirmation/{orderId}', 'orderConfirmation')->name('order-confirmation');
+    });
+
+    // Order routes
+    Route::controller(OrderController::class)->group(function () {
+        Route::get('my-orders', 'myOrders')->name('my-orders');
+        Route::get('order-details/{orderId}', 'orderDetails')->name('order-details');
+        Route::get('track-order/{orderNumber}', 'trackOrder')->name('track-order');
+        Route::post('cancel-order/{orderId}', 'cancelOrder')->name('cancel-order');
     });
 
     // User logout

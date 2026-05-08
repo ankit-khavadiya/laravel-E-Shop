@@ -56,17 +56,8 @@ class WishlistController extends Controller
             |--------------------------------------------------------------------------
             */
             if ($wishlist) {
-
                 $wishlist->delete();
-
-                return $this->sendResponse(
-                    'Product removed from wishlist.',
-                    [
-                        'added' => false,
-                        'wishlist_count' => $this->getWishlistCount()
-                    ]
-                );
-
+                return $this->sendResponse('Product removed from wishlist.', ['added' => false, 'wishlist_count' => $this->getWishlistCount()]);
             }
 
             /*
@@ -82,9 +73,7 @@ class WishlistController extends Controller
             return $this->sendResponse('Product added to wishlist.', ['added' => true, 'wishlist_count' => $this->getWishlistCount()]);
 
         } catch (\Exception $exception) {
-
-            return $this->sendError($exception->getMessage());
-
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -119,17 +108,10 @@ class WishlistController extends Controller
 
             $wishlist->delete();
 
-            return $this->sendResponse(
-                'Item removed from wishlist.',
-                [
-                    'wishlist_count' => $this->getWishlistCount()
-                ]
-            );
+            return $this->sendResponse('Item removed from wishlist.', ['wishlist_count' => $this->getWishlistCount()]);
 
         } catch (\Exception $exception) {
-
-            return $this->sendError($exception->getMessage());
-
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -143,7 +125,7 @@ class WishlistController extends Controller
         try {
             return $this->sendResponse('Wishlist count fetched successfully.', ['count' => $this->getWishlistCount()]);
         } catch (\Exception $exception) {
-            return $this->sendError($exception->getMessage());
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -165,31 +147,17 @@ class WishlistController extends Controller
             }
 
             if (!Auth::check()) {
-
-                return $this->sendResponse(
-                    'Wishlist checked.',
-                    [
-                        'in_wishlist' => false
-                    ]
-                );
-
+                return $this->sendResponse('Wishlist checked.', ['in_wishlist' => false]);
             }
 
             $inWishlist = Wishlist::where('user_id', Auth::id())
                 ->where('product_id', $request->product_id)
                 ->exists();
 
-            return $this->sendResponse(
-                'Wishlist checked.',
-                [
-                    'in_wishlist' => $inWishlist
-                ]
-            );
+            return $this->sendResponse('Wishlist checked.', ['in_wishlist' => $inWishlist]);
 
         } catch (\Exception $exception) {
-
-            return $this->sendError($exception->getMessage());
-
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -201,21 +169,13 @@ class WishlistController extends Controller
     public function getWishlist()
     {
         try {
-
             if (!Auth::check()) {
-
-                return $this->sendResponse('Wishlist fetched.', [
-                        'items' => [],
-                        'count' => 0
-                    ]
-                );
-
+                return $this->sendResponse('Wishlist fetched.', ['items' => [], 'count' => 0]);
             }
 
             $wishlistItems = $this->getWishlistItems();
 
             $items = $wishlistItems->map(function ($item) {
-
                 return [
                     'id' => $item->id,
                     'product_id' => $item->product_id,
@@ -226,21 +186,12 @@ class WishlistController extends Controller
                     'stock' => $item->product->quantity,
                     'in_stock' => $item->product->quantity > 0,
                 ];
-
             });
 
-            return $this->sendResponse(
-                'Wishlist fetched successfully.',
-                [
-                    'items' => $items,
-                    'count' => $items->count()
-                ]
-            );
+            return $this->sendResponse('Wishlist fetched successfully.', ['items' => $items, 'count' => $items->count()]);
 
         } catch (\Exception $exception) {
-
-            return $this->sendError($exception->getMessage());
-
+            return $this->sendException($exception->getMessage());
         }
     }
 
@@ -266,7 +217,6 @@ class WishlistController extends Controller
         if (!Auth::check()) {
             return 0;
         }
-
         return Wishlist::where('user_id', Auth::id())->count();
     }
 }

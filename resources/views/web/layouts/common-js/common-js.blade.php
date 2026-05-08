@@ -48,7 +48,7 @@
     // Wishlist count update
     function updateWishlistCount() {
         $.get("{{ route('wishlist-count') }}", function(data) {
-            $('#wishlistCount').text(data.data.count);
+            $('#wishlistCount,#userWishlistCount').text(data.data.count);
         });
     }
     updateWishlistCount();

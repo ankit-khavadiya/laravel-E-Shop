@@ -234,3 +234,9 @@
 // same process as google login for firebase, if you have implement both login google and facebook then json or other firebase script use once
 // Also need create app key and secret key by https://developers.facebook.com/
 
+
+
+/* --- Implement Yajra DataTable --- */
+
+// Install package :- composer require yajra/laravel-datatables-oracle:"^12.0"
+// For advanced features :- composer require yajra/laravel-datatables:"^12.0"

@@ -57,16 +57,27 @@ Route::prefix('admin')->group(function () {
         // Admin customer tab routes
         Route::controller(CustomerController::class)->group(function () {
             Route::get('customers', 'index')->name('customers');
+            Route::post('get-customers', 'getCustomers')->name('get-customers');
+            Route::post('customer-details', 'customerDetails')->name('customer-details');
+            Route::post('delete-customer', 'deleteCustomer')->name('delete-customer');
         });
 
         // Admin order tab routes
         Route::controller(OrderController::class)->group(function () {
             Route::get('orders', 'index')->name('orders');
+            Route::post('get-orders', 'getOrders')->name('get-orders');
+            Route::post('order-details', 'orderDetails')->name('admin-order-details');
+            Route::post('update-order-status', 'updateStatus')->name('update-order-status');
+            Route::post('delete-order', 'deleteOrder')->name('delete-order');
         });
 
         // Admin payment tab routes
         Route::controller(PaymentController::class)->group(function () {
             Route::get('payments', 'index')->name('payments');
+            Route::post('get-payments', 'getPayments')->name('get-payments');
+            Route::post('update-payment-status', 'updateStatus')->name('update-payment-status');
+            Route::post('delete-payment', 'deletePayment')->name('delete-payment');
+            Route::post('payment-details', 'paymentDetails')->name('payment-details');
         });
 
         // Admin setting tab routes

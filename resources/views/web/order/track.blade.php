@@ -51,7 +51,7 @@
                         <div class="info-row">
                             <span class="info-label">Order Status</span>
                             <span class="info-value">
-                            <span class="badge bg-{{ $order->status == 'delivered' ? 'success' : ($order->status == 'cancelled' ? 'danger' : 'warning') }}">
+                            <span class="badge status-{{ $order->status }}">
                                 {{ ucfirst($order->status) }}
                             </span>
                         </span>

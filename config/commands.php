@@ -240,3 +240,8 @@
 
 // Install package :- composer require yajra/laravel-datatables-oracle:"^12.0"
 // For advanced features :- composer require yajra/laravel-datatables:"^12.0"
+
+
+
+/* --- Implement Push Notification with Firebase --- */
+

@@ -4,10 +4,14 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ResponseTrait;
+use App\Mail\userLogin;
+use App\Mail\userRegister;
+use App\Mail\welcomeemail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Kreait\Firebase\Factory;
 
@@ -43,11 +47,11 @@ class AuthenticateController extends Controller
             $login = Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password]);
 
             if ($login) {
-                $name = User::where('email', $request->email)->first();
-                $name->update(['last_login_at' => now()]);
+                $user = User::where('email', $request->email)->first();
+                $user->update(['last_login_at' => now()]);
 
                 // sent mail to admin welcome to admin panel
-//                Mail::to($request->email)->send(new welcomeemail());
+                Mail::to($request->email)->send(new userLogin($user));
 
                 return $this->sendSuccess('Login successfully');
             }else{
@@ -73,13 +77,18 @@ class AuthenticateController extends Controller
                 return $this->sendValidationError($validator->errors());
             }
 
-
             $param = $request->only(['name', 'email', 'number']);
             $param['password'] = Hash::make($request->password);
             $register = new User();
             $register->fill($param)->save();
+            $user = $register;
 
-            return $this->sendSuccess('Register successfully');
+            if ($user) {
+                Mail::to($request->email)->send(new userRegister($user));
+                return $this->sendSuccess('Register successfully');
+            }else{
+                return $this->sendError('Failed to register');
+            }
 
         }catch (\Exception $exception){
             return $this->sendError($exception->getMessage());
@@ -125,6 +134,7 @@ class AuthenticateController extends Controller
 
                 $user = User::where('social_id',$uid)->first();
                 if(Auth::loginUsingId($user->id)){
+                    Mail::to($request->email)->send(new userLogin($user));
                     return $this->sendSuccess("User logged in successfully");
                 }else{
                     return $this->sendError("Failed to login !");

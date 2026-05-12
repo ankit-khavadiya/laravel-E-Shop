@@ -5,18 +5,61 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ResponseTrait;
 use App\Models\Admin;
+use App\Models\Order;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
     use ResponseTrait;
-    public function index(){
-        return view('admin.home.index');
+
+    //
+    // Return admin home page blade(Dashboard)
+    public function index()
+    {
+        // COUNTS
+        $totalSales = Payment::where('status', 'success')->sum('amount');
+
+        $totalOrders = Order::count();
+
+        $totalCustomers = User::count();
+
+        $revenue = Order::where('status', 'delivered')->sum('total');
+
+        // RECENT ORDERS
+        $recentOrders = Order::latest()->take(5)->get();
+
+        // TOP PRODUCTS
+        $topProducts = Product::withCount('orderItems')
+            ->orderBy('order_items_count', 'DESC')
+            ->take(5)
+            ->get();
+
+        // SALES CHART
+        $monthlySales = Payment::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(amount) as total')
+        )
+            ->where('status', 'success')
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        $salesData = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $salesData[] = $monthlySales[$i] ?? 0;
+        }
+
+        return view('admin.home.index', compact('totalSales', 'totalOrders', 'totalCustomers', 'revenue', 'recentOrders', 'topProducts', 'salesData'));
     }
 
+    // Return admin profile blade
     public function adminProfile()
     {
         $adminDetails = Auth::guard('admin')->user();
@@ -50,7 +93,7 @@ class HomeController extends Controller
         }
     }
 
-    // Update admin image
+    // Update admin profile image
     public function adminProfileImage(Request $request)
     {
         try {
@@ -87,7 +130,7 @@ class HomeController extends Controller
         }
     }
 
-    // Change password
+    // Change admin password
     public function adminChangePassword(Request $request){
         try{
             $validator = Validator::make($request->all(),[

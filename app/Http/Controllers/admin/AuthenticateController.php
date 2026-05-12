@@ -42,7 +42,7 @@ class AuthenticateController extends Controller
                 session(['profile_image' => $name->profile_image]);
 
                 // sent mail to admin welcome to admin panel
-                Mail::to($request->email)->send(new welcomeemail());
+//                Mail::to($request->email)->send(new welcomeemail());
 
                 return $this->sendSuccess('Login successfully');
             }else{

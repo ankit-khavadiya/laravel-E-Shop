@@ -112,6 +112,7 @@
 <script type="module">
     import {initializeApp} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
     import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js';
+    import {getMessaging, getToken, onMessage} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-messaging.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -127,6 +128,7 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const messaging = getMessaging(app);
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
         prompt: 'select_account'

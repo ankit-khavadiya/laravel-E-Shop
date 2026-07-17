@@ -21,9 +21,9 @@
 // composer install
 // if we have run old project(like get by github) then run this commands
 // composer update --ignore-platform-reqs   // If you face php version issue then use this command
-// php artisan key:generate
 // cp .env.example .env
-// php artisan migrate --database=mysql_react --seed
+// php artisan key:generate
+// php artisan migrate --database=mysql_react --seed // for react
 // php artisan migrate:fresh --seed
 
 
@@ -245,3 +245,13 @@
 
 /* --- Implement Push Notification with Firebase --- */
 
+
+
+/* --- Implement Schedules --- */
+
+// Create command :- php artisan make:command SendReminderCommand
+// Define schedule in routes/console.php
+// Run Scheduler Once :- php artisan schedule:run
+// Run Scheduler Continuously (Local Development) :- php artisan schedule:work
+// List schedule task :- php artisan schedule:list
+// Interrupt Running Scheduler :- php artisan schedule:interrupt

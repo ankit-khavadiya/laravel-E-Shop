@@ -51,7 +51,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <a href="{{ route('logout') }}" >
                                         <i class="fas fa-sign-out-alt"></i> Logout
                                     </a>
                                 </li>

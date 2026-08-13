@@ -118,11 +118,11 @@ class AuthenticateController extends Controller
                     $filename = "";
                     if (!empty($user->photoUrl)){
                         $filename = fileName('png');
-                        if (!file_exists(public_path("upload"))){
-                            mkdir(public_path("upload"), 0777, true);
+                        if (!file_exists(public_path("upload/web"))){
+                            mkdir(public_path("upload/web"), 0777, true);
                         }
 
-                        file_put_contents(public_path("upload/$filename"),file_get_contents($user->photoUrl));
+                        file_put_contents(public_path("upload/web/$filename"),file_get_contents($user->photoUrl));
                     }
                     $params['social_id'] = $uid;
                     $params['email'] = $user->email;
@@ -134,7 +134,7 @@ class AuthenticateController extends Controller
 
                 $user = User::where('social_id',$uid)->first();
                 if(Auth::loginUsingId($user->id)){
-                    Mail::to($request->email)->send(new userLogin($user));
+                    Mail::to($user->email)->send(new userLogin($user));
                     return $this->sendSuccess("User logged in successfully");
                 }else{
                     return $this->sendError("Failed to login !");
@@ -177,12 +177,12 @@ class AuthenticateController extends Controller
                     if (!empty($userRecord->photoUrl)) {
                         $filename = fileName('png');
 
-                        if (!file_exists(public_path("upload"))) {
-                            mkdir(public_path("upload"), 0777, true);
+                        if (!file_exists(public_path("upload/web"))) {
+                            mkdir(public_path("upload/web"), 0777, true);
                         }
 
                         file_put_contents(
-                            public_path("upload/$filename"),
+                            public_path("upload/web/$filename"),
                             file_get_contents($userRecord->photoUrl)
                         );
                     }

@@ -56,12 +56,12 @@
                             <button class="btn btn-primary" type="submit">Subscribe</button>
                         </div>
                     </form>
-                    <div class="payment-methods mt-4">
-                        <img src="{{ asset('frontend/images/payment/visa.png') }}" alt="Visa">
-                        <img src="{{ asset('frontend/images/payment/mastercard.png') }}" alt="Mastercard">
-                        <img src="{{ asset('frontend/images/payment/paypal.png') }}" alt="PayPal">
-                        <img src="{{ asset('frontend/images/payment/amex.png') }}" alt="Amex">
-                    </div>
+{{--                    <div class="payment-methods mt-4">--}}
+{{--                        <img src="{{ asset('frontend/images/payment/visa.png') }}" alt="Visa">--}}
+{{--                        <img src="{{ asset('frontend/images/payment/mastercard.png') }}" alt="Mastercard">--}}
+{{--                        <img src="{{ asset('frontend/images/payment/paypal.png') }}" alt="PayPal">--}}
+{{--                        <img src="{{ asset('frontend/images/payment/amex.png') }}" alt="Amex">--}}
+{{--                    </div>--}}
                 </div>
             </div>
         </div>

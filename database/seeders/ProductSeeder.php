@@ -25,10 +25,11 @@ class ProductSeeder extends Seeder
             }
 
             // use your helper to generate a filename
-            $productImage = fileName('png');
+            $productImage = "";
 
             $imageContent = @file_get_contents($item['image']);
             if ($imageContent !== false) {
+                $productImage = fileName('png');
                 file_put_contents(public_path("upload/product/{$productImage}"), $imageContent);
             }
 

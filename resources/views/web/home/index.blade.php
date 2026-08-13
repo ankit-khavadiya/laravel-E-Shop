@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
                     <div class="hero-image">
-                        <img src="{{ asset('frontend/images/hero-image.png') }}" alt="Hero Image" class="img-fluid">
+                        <img src="{{ asset('assets/images/web/hero-image.jpeg') }}" alt="Hero Image" class="img-fluid">
                         <div class="floating-card card-1">
                             <i class="fas fa-truck"></i>
                             <span>Free Shipping</span>
@@ -178,7 +178,7 @@
                             <a href="#" class="btn btn-light">Shop Now →</a>
                         </div>
                         <div class="banner-image">
-                            <img src="{{ asset('frontend/images/banner-1.png') }}" alt="Banner">
+                            <img src="{{ asset('assets/images/web/placeholders/no-image.png') }}" alt="Banner">
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                             <a href="#" class="btn btn-light">Shop Now →</a>
                         </div>
                         <div class="banner-image">
-                            <img src="{{ asset('frontend/images/banner-2.png') }}" alt="Banner">
+                            <img src="{{ asset('assets/images/web/placeholders/no-image.png') }}" alt="Banner">
                         </div>
                     </div>
                 </div>

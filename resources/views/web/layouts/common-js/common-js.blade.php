@@ -39,17 +39,21 @@
 
     // Cart count update
     function updateCartCount() {
+        @auth
         $.get("{{ route('cart-count') }}", function(data) {
             $('#cartCount').text(data.data.count);
         });
+        @endauth
     }
     updateCartCount()
 
     // Wishlist count update
     function updateWishlistCount() {
+        @auth
         $.get("{{ route('wishlist-count') }}", function(data) {
             $('#wishlistCount,#userWishlistCount').text(data.data.count);
         });
+        @endauth
     }
     updateWishlistCount();
 
